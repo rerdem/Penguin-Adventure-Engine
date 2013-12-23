@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<game>
+	<slide id="1">
+		<img>01.jpg</img>
+		<txt>Blabla walks east.</txt>
+		<items>
+			<item>+Key</item>
+			<item>+Stone</item>
+			<item>-Book</item>
+		</items>
+		<stats>
+			<stat>+Curse</stat>
+			<stat>-Confusion</stat>
+			<stat>-Panic</stat>
+		</stats>
+		<money>-5</money>
+		<karma>+1</karma>
+		<options>
+			<option slide="2" req="iKey">Continues walking east.</option>
+			<option slide="3">Walk north.</option>
+		</options>
+	</slide>
+	<slide id="2">
+		<img>02.jpg</img>
+		<txt>Blabla continues walking east.</txt>
+		<stats>
+			<stat>+Bored</stat>
+		</stats>
+		<options>
+			<option slide="4">Continues walking east.</option>
+		</options>
+	</slide>
+</game>
