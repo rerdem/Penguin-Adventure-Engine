@@ -12,3 +12,5 @@ mainwindow::~mainwindow()
 {
     delete ui;
 }
+
+//Just a test.
