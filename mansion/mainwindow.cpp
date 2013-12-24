@@ -3,10 +3,10 @@
 #include <QtCore>
 #include <QtGui>
 #include <QMessageBox>
-//#include <vector>
+#include <vector>
 //#include <QFileDialog>
 
-
+#include "gameslide.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 
@@ -14,6 +14,31 @@ mainwindow::mainwindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::mainwindow)
 {
+    /**
+    testEdit = new QTextEdit(this);
+    //testEdit->setStyleSheet("QTextEdit { height:50px; width:200px; margin-top: 50px; }");
+    testEdit->append("01");
+    //testEdit->show();
+    testEdit->append("02");
+
+
+
+    QImage myImage;
+    myImage.load("image.jpg");
+
+    testLabel.setPixmap(QPixmap::fromImage(myImage));
+    testLabel.show();
+    **/
+
+
+
+    /**
+    QGridLayout *gridLayout = new QGridLayout;
+    gridLayout->addWidget(testLabel, 0, 1);
+    gridLayout->addWidget(testEdit, 1, 1);
+    setLayout(gridLayout);
+    **/
+
     ui->setupUi(this);
 
     //falls kein Pfad für die Datenbanken gegeben, erstelle database-Ordner
@@ -21,17 +46,10 @@ mainwindow::mainwindow(QWidget *parent) :
     QDir().mkdir("gamefiles");
     path = QDir::currentPath() + QDir::separator() +"gamefiles";
     xmlpath=QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + "adventure.xml";
+    imgpath=QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + + "images" + QDir::separator();
     //setzt QStrings in UTF-8 für Sonderzeichen
     QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-    /**
-    if(!initialize(xmlpath))
-    {
-        QMessageBox::critical(this, tr("Error!"),
-                              tr("XML file not found!"),
-                              QMessageBox::Ok);
-    }
-    else QMessageBox::information(this, "Information", "Init success!");
-    **/
+    initialize();
 }
 
 mainwindow::~mainwindow()
@@ -39,101 +57,147 @@ mainwindow::~mainwindow()
     delete ui;
 }
 
-/**
-bool mainwindow::initialize(QString xmlname)
-{
-    Q_ASSERT(xmlname.length()>0);
 
-    QFile file(xmlname);
+//textEditBody->setText(tmpMailContent->mailBody.replace("\\linebreak", "\n\r"));
+
+
+
+void mainwindow::initialize()
+{
+    Q_ASSERT(xmlpath.length()>0);
+
+    QFile file(xmlpath);
     if (!file.open(QFile::ReadOnly))
+    {
         QMessageBox::critical(this, tr("Error!"),
                                     tr("Unable to open XML file!"),
         QMessageBox::Ok);
+        return;
+    }
 
+    GameSlide *slide;
+    int goal;
+    QString req;
+    QXmlStreamAttributes attributes;
 
-        //lies txt in QStringList
-        QStringList stringList;
-        QTextStream textStream(&file);
-        textStream.setCodec("UTF-8");
-        while (true)
-        {
-            QString line = textStream.readLine();
-            if (line.isNull())
-                break;
-            else
-                stringList.append(line);
+    QXmlStreamReader xml(&file);
+    while (!xml.atEnd() && !xml.hasError()) {
+        QXmlStreamReader::TokenType token = xml.readNext();
+        if(token == QXmlStreamReader::StartDocument) {
+            continue;
         }
-        file.close();
-
-
-
-        QXmlStreamReader xml(&file);
-        while (!xml.atEnd() && !xml.hasError())
-        {
-            QXmlStreamReader::TokenType token = xml.readNext();
-                    if(token == QXmlStreamReader::StartDocument)
-                    {
-                        continue;
-                    }
-
-                    if(token == QXmlStreamReader::StartElement)
-                    {
-                        if(xml.name() == "data")
-                        {
-                            continue;
+        if(token == QXmlStreamReader::StartElement) {
+            if(xml.name() == "game") {
+                continue;
+            }
+            if(xml.name() == "slide") {
+                //qDebug() << xml.name().toString();
+                slide=new GameSlide();
+                attributes = xml.attributes();
+                if(attributes.hasAttribute("id")) {
+                    slide->setId(attributes.value("id").toString().toInt());
+                    //qDebug() << attributes.value("id").toString();
+                }
+                xml.readNext();
+                //while (!xml.atEnd()) {
+                while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "slide")) {
+                    //qDebug() <<xml.name().toString();
+                    if (xml.isStartElement()) {
+                        if(xml.name() == "img") {
+                            //QMessageBox::information(this, "Info", xml.readElementText());
+                            slide->setImg(xml.readElementText());
+                            //qDebug() << xml.name().toString();
+                            //qDebug() << xml.readElementText();
                         }
-
-                        if(xml.name() == "video")
-                        {
+                        if(xml.name() == "txt") {
+                            slide->setTxt(xml.readElementText());
+                            //qDebug() << xml.name().toString();
+                            //qDebug() << xml.readElementText();
+                        }
+                        if (xml.name() == "items") {
                             xml.readNext();
-                            //qDebug() <<xml.name().toString();
-                            while (!xml.atEnd())
-                            {
-                                if (xml.isStartElement())
-                                {
-                                    if(xml.name() == "url")
-                                    {
-                                        curV = xml.readElementText();
-                                    }
-                                    if(xml.name() == "title")
-                                    {
-                                        curT = xml.readElementText();
-                                    }
-                                    if (xml.name() == "user")
-                                    {
-                                        curU = xml.readElementText();
-                                    }
-                                    if (xml.name() == "comment")
-                                    {
-                                        curC = xml.readElementText();
-                                        dummyrecord.setValue("title",curT);
-                                        dummyrecord.setValue("video",curV);
-                                        dummyrecord.setValue("user",curU);
-                                        dummyrecord.setValue("comment",curC);
-                                        model->insertRecord(-1,dummyrecord);
+                            while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "items")) {
+                                if (xml.isStartElement()) {
+                                    if(xml.name() == "item") {
+                                        slide->addItems(xml.readElementText());
+                                        //qDebug() << xml.name().toString();
+                                        //qDebug() << xml.readElementText();
                                     }
                                 }
                                 xml.readNext();
-                                //qDebug() <<xml.name().toString();
                             }
                         }
-                        xml.readNext();
+                        if (xml.name() == "stats") {
+                            xml.readNext();
+                            while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "stats")) {
+                                if (xml.isStartElement()) {
+                                    if(xml.name() == "stat") {
+                                        slide->addStats(xml.readElementText());
+                                        //qDebug() << xml.name().toString();
+                                        //qDebug() << xml.readElementText();
+                                    }
+                                }
+                                xml.readNext();
+                            }
+                        }
+                        if(xml.name() == "money") {
+                            slide->setMoney(xml.readElementText().toInt());
+                            //qDebug() << xml.name().toString();
+                            //qDebug() << xml.readElementText();
+                        }
+                        if(xml.name() == "karma") {
+                            //qDebug() << xml.name().toString();
+                            //qDebug() << xml.readElementText();
+                            slide->setKarma(xml.readElementText().toInt());
+                        }
+                        if (xml.name() == "options") {
+                            xml.readNext();
+                            while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "options")) {
+                                if (xml.isStartElement()) {
+                                    if(xml.name() == "option") {
+                                        attributes = xml.attributes();
+                                        if(attributes.hasAttribute("slide")) {
+                                            goal=attributes.value("slide").toString().toInt();
+                                        }
+                                        if(attributes.hasAttribute("req")) {
+                                            req=attributes.value("req").toString();
+                                        }
+                                        else req="";
+                                        //qDebug() << xml.name().toString();
+                                        //qDebug() << attributes.value("slide").toString();
+                                        //qDebug() << attributes.value("req").toString();
+                                        //qDebug() << xml.readElementText();
+                                    }
+                                    slide->addOptions(goal, req, xml.readElementText());
+                                }
+                                xml.readNext();
+                            }
+                        }
                     }
-                    //
-                     if(token == QXmlStreamReader::EndDocument)
-                     {
-                         //qDebug() << "Ende";
-                         QMessageBox::information(this, "Information", "Import complete!");
-                         break;
-                     }
-                     //
+                    xml.readNext();
+                    //qDebug() <<xml.name().toString();
+                }
+                slides.append(slide);
+                xml.readNext();
+            }
         }
-        file.close();
-
-
-
+        if(token == QXmlStreamReader::EndDocument) {
+            qDebug() << "Ende";
+            QMessageBox::information(this, "Information", "Import complete!");
+            break;
+        }
     }
-    else return false;
-    return true;
+
+    /* Error handling. */
+    if(xml.hasError()) {
+        QMessageBox::critical(this,
+                              "QXSRExample::parseXML",
+                              xml.errorString(),
+                              QMessageBox::Ok);
+    }
+    /* Removes any device() or data from the reader
+     * and resets its internal state to the initial state. */
+    xml.clear();
+    file.close();
 }
-**/
+

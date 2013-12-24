@@ -8,7 +8,9 @@
 using namespace std;
 #include <fstream>
 #include <QtGui>
-#include <QLineEdit>
+//#include <QLineEdit>
+#include "gameslide.h"
+#include "player.h"
 
 namespace Ui {
 class mainwindow;
@@ -23,10 +25,15 @@ public:
     ~mainwindow();
 
     QString xmlpath;
+    QString imgpath;
+    QVector<GameSlide*> slides;
+    Player currentplayer;
+    QTextEdit *testEdit;
+    QLabel testLabel;
     
 private:
     Ui::mainwindow *ui;
-    //bool initialize(QString txtname);
+    void initialize();
 
 private slots:
     //void on_actionSave_triggered();

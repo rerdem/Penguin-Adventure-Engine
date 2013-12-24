@@ -11,8 +11,12 @@ TEMPLATE = app
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    gameslide.cpp \
+    player.cpp
 
-HEADERS  += mainwindow.h
+HEADERS  += mainwindow.h \
+    gameslide.h \
+    player.h
 
 FORMS    += mainwindow.ui
