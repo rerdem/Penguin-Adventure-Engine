@@ -77,7 +77,7 @@ void mainwindow::initialize()
 
     GameSlide *slide;
     int goal;
-    QString req;
+    QString req, name;
     QXmlStreamAttributes attributes;
 
     QXmlStreamReader xml(&file);
@@ -160,7 +160,13 @@ void mainwindow::initialize()
                                             goal=attributes.value("slide").toString().toInt();
                                         }
                                         if(attributes.hasAttribute("req")) {
-                                            req=attributes.value("req").toString();
+                                            if(attributes.hasAttribute("name")) {
+                                                req=attributes.value("req").toString();
+                                                name=attributes.value("name").toString();
+                                            }
+                                            else QMessageBox::critical(this, tr("Error!"),
+                                                                       tr("Option with req missing name found."),
+                                                                        QMessageBox::Ok);
                                         }
                                         else req="";
                                         //qDebug() << xml.name().toString();
