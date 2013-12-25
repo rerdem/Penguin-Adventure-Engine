@@ -55,11 +55,16 @@ mainwindow::mainwindow(QWidget *parent) :
     slideImageLabel = new QLabel(this);
     //slideImageLabel->setPixmap(QPixmap::fromImage(slideImage));
 
-    mainBox = new QVBoxLayout(centralWidget);
-    mainBox->addWidget(slideImageLabel);
-    mainBox->addWidget(inventoryButton);
-    mainBox->addWidget(slideTextEdit);
-    mainBox->addWidget(but02);
+    //mainBox = new QVBoxLayout(centralWidget);
+    //mainBox->addWidget(slideImageLabel);
+    //mainBox->addWidget(inventoryButton);
+    //mainBox->addWidget(slideTextEdit);
+    //mainBox->addWidget(but02);
+    mainBox = new QGridLayout(centralWidget);
+    mainBox->addWidget(slideImageLabel, 0, 0, 1, 5);
+    mainBox->addWidget(inventoryButton, 1, 0, 1, 5);
+    mainBox->addWidget(slideTextEdit, 2, 0, 1, 5);
+    //mainBox->addWidget(but02);
     //setLayout(mainBox);
 
 
@@ -70,6 +75,18 @@ mainwindow::mainwindow(QWidget *parent) :
 mainwindow::~mainwindow()
 {
     delete ui;
+}
+
+
+void mainwindow::changeSlide(int goalID)
+{
+    if (goalID==-1) QMessageBox::information(this, "Congratulations!", "You win!");
+    else
+    {
+        currentplayer->setPrevLocation(currentplayer->getLocation());
+        currentplayer->setLocation(goalID);
+        game();
+    }
 }
 
 
@@ -119,7 +136,46 @@ void mainwindow::game()
             else currentplayer->setMoney(currentplayer->getMoney()+slides[i]->getMoney());
             //compute karma change
             currentplayer->setKarma(currentplayer->getKarma()+slides[i]->getKarma());
+            //compute gameovers change
+            if (slides[i]->getGameover()) currentplayer->setGameovers(currentplayer->getGameovers()+1);
             //list options
+            if (!slides[i]->getOptions().isEmpty())
+            {
+                //if there are optionButtons, delete them
+                if (!optionButtons.isEmpty())
+                {
+                    for (int j=0; j<optionButtons.size(); j++) disconnect(optionButtons[j], SIGNAL(clicked()), this, SLOT(changeSlide(buttonRefs[j])));
+                    for (int j=0; j<optionButtons.size(); j++) delete optionButtons[j];
+                    optionButtons.clear();
+                    buttonRefs.clear();
+                }
+
+                QVector<Option> tempOptions=slides[i]->getOptions();
+                for (int j=0; j<tempOptions.size(); j++)
+                {
+                    //enforcing maximum of 10 Options
+                    if (optionButtons.size()==10) break;
+                    //qDebug() << tempOptions[j].req;
+                    if (currentplayer->meetsReq(tempOptions[j].req, tempOptions[j].name))
+                    {
+                        //QMessageBox::critical(this, tr("Error!"), tr("Options found!"), QMessageBox::Ok);
+                        QPushButton *tempButton = new QPushButton(tempOptions[j].txt);
+                        optionButtons.append(tempButton);
+                        buttonRefs.append(tempOptions[j].goal);
+                        //connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
+                    }
+                }
+                for (int j=0; j<optionButtons.size(); j++)
+                {
+                    QObject::connect(optionButtons[j], SIGNAL(clicked()), this, SLOT(changeSlide(buttonRefs[j])));
+                    if (j<=5) mainBox->addWidget(optionButtons[j], j+3, j);
+                    if (j>5) mainBox->addWidget(optionButtons[j], j+3, j-5);
+                }
+
+            }
+            else QMessageBox::critical(this, tr("Error!"),
+                                       tr("No options found!"),
+                                        QMessageBox::Ok);
             break;
         }
     }
@@ -133,7 +189,7 @@ void mainwindow::game()
     slideImageLabel->setPixmap(QPixmap::fromImage(slideImage));
     slideTextEdit->clear();
     slideTextEdit->append("03");
-    **/
+
 
     bool breaker=false;
     //game-Loop
@@ -143,6 +199,7 @@ void mainwindow::game()
         if (currentplayer->getLocation()==-1) breaker=true;
         breaker=true;
     }
+    **/
 }
 
 
@@ -236,6 +293,11 @@ void mainwindow::initialize()
                             //qDebug() << xml.readElementText();
                             slide->setKarma(xml.readElementText().toInt());
                         }
+                        if(xml.name() == "gameover") {
+                            //qDebug() << xml.name().toString();
+                            //qDebug() << xml.readElementText();
+                            slide->setGameover(true);
+                        }
                         if (xml.name() == "options") {
                             xml.readNext();
                             while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "options")) {
@@ -298,4 +360,5 @@ void mainwindow::initialize()
     xml.clear();
     file.close();
 }
+
 

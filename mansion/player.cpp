@@ -17,6 +17,7 @@ Player::Player()
     karma=0;
     gameovers=0;
     location=0;
+    prevLocation=0;
 }
 
 void Player::removeItems(QString tempItem)
@@ -55,6 +56,7 @@ bool Player::isStatus(QString searchStatus)
 
 bool Player::meetsReq(QString req, QString reqName)
 {
+    if (req=="") return true;
     if (QString::compare(req.at(0), "+")==0)
     {
         if (QString::compare(req.mid(1), "item")==0) for (int i=0; i<items.size(); i++) return hasItem(reqName);

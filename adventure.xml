@@ -15,6 +15,7 @@
 		</stats>
 		<money>-5</money>
 		<karma>+1</karma>
+		<gameover></gameover>
 		<options>
 			<option slide="2" req="+item" name="Key">Continues walking east.</option>
 			<option slide="3">Walk north.</option>

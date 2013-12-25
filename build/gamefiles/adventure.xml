@@ -22,6 +22,7 @@
 		</stats>
 		<money>-5</money>
 		<karma>+1</karma>
+		<gameover></gameover>
 		<options>
 			<option slide="2" req="+item" name="Key">Continues walking east.</option>
 			<option slide="-1">Leave.</option>
@@ -34,7 +35,7 @@
 			<stat>+Bored</stat>
 		</stats>
 		<options>
-			<option slide="4">Continues walking east.</option>
+			<option slide="1">Return to Exit</option>
 		</options>
 	</slide>
 </game>

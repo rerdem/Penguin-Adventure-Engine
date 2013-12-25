@@ -17,6 +17,7 @@ GameSlide::GameSlide()
     txt="";
     money=0;
     karma=0;
+    gameover=false;
 }
 
 

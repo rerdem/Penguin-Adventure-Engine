@@ -32,6 +32,9 @@ class Player
         void setLocation(int tempLocation) {location=tempLocation;}
         int getLocation() {return location;}
 
+        void setPrevLocation(int tempLocation) {prevLocation=tempLocation;}
+        int getPrevLocation() {return prevLocation;}
+
         bool hasItem(QString searchItem);
         bool isStatus(QString searchStatus);
         bool meetsReq(QString req, QString reqName);
@@ -45,6 +48,7 @@ class Player
         int karma;
         int gameovers;
         int location;
+        int prevLocation;
 };
 
 #endif // PLAYER_H

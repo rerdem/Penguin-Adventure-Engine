@@ -36,6 +36,9 @@ class GameSlide
         void setKarma(int tempKarma) {karma=tempKarma;}
         int getKarma() {return karma;}
 
+        void setGameover(bool tempGameover) {gameover=tempGameover;}
+        int getGameover() {return gameover;}
+
         void addOptions(int tempGoal, QString tempReq, QString tempName, QString tempTxt);
         QVector<Option>& getOptions() {return options;}
 
@@ -48,6 +51,7 @@ class GameSlide
         QVector<QString> stats;
         int money;
         int karma;
+        bool gameover;
         QVector<Option> options;
 
 };

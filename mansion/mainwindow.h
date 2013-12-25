@@ -34,17 +34,22 @@ public:
     Player *currentplayer;
 
     QWidget *centralWidget;
-    QVBoxLayout* mainBox;
+    //QVBoxLayout* mainBox;
+    QGridLayout* mainBox;
     QTextEdit *slideTextEdit;
     QLabel *slideImageLabel;
     QPushButton *inventoryButton;
     QPushButton *but02;
+
+    QVector<QPushButton*> optionButtons;
+    QVector<int> buttonRefs;
 
     
 private:
     Ui::mainwindow *ui;
     void initialize();
     void game();
+    void changeSlide(int goalID);
 
 private slots:
     //void on_actionSave_triggered();
