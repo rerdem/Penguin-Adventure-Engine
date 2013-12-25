@@ -14,22 +14,17 @@ mainwindow::mainwindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::mainwindow)
 {
-    /**
-    testEdit = new QTextEdit(this);
-    //testEdit->setStyleSheet("QTextEdit { height:50px; width:200px; margin-top: 50px; }");
-    testEdit->append("01");
-    //testEdit->show();
-    testEdit->append("02");
-
-    QImage myImage;
-    myImage.load("image.jpg");
-    testLabel = new QLabel(this);
-    testLabel->setPixmap(QPixmap::fromImage(myImage));
-    //testLabel.show();
-    **/
-
     centralWidget = new QWidget(this);
     this->setCentralWidget( centralWidget );
+
+    QMenu *fileMenu = new QMenu(tr("&File"), this);
+    menuBar()->addMenu(fileMenu);
+    fileMenu->addAction(tr("&About"), this, SLOT(close()));
+    fileMenu->addSeparator();
+    fileMenu->addAction(tr("&Save"), this, SLOT(close()));
+    fileMenu->addAction(tr("&Load"), this, SLOT(close()));
+    fileMenu->addSeparator();
+    fileMenu->addAction(tr("&Quit"), this, SLOT(close()));
 
     but01=new QPushButton("01");
     but02=new QPushButton("02");
