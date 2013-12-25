@@ -11,6 +11,7 @@ using namespace std;
 
 #include <QPushButton>
 #include <QVBoxLayout>
+#include <QHBoxLayout>
 //#include <QLineEdit>
 #include "gameslide.h"
 #include "player.h"

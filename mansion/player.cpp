@@ -52,3 +52,18 @@ bool Player::isStatus(QString searchStatus)
     }
     return false;
 }
+
+bool Player::meetsReq(QString req, QString reqName)
+{
+    if (QString::compare(req.at(0), "+")==0)
+    {
+        if (QString::compare(req.mid(1), "item")==0) for (int i=0; i<items.size(); i++) return hasItem(reqName);
+        if (QString::compare(req.mid(1), "status")==0) for (int i=0; i<stats.size(); i++) return isStatus(reqName);
+    }
+    if (QString::compare(req.at(0), "-")==0)
+    {
+        if (QString::compare(req.mid(1), "item")==0) for (int i=0; i<items.size(); i++) return !hasItem(reqName);
+        if (QString::compare(req.mid(1), "status")==0) for (int i=0; i<stats.size(); i++) return !isStatus(reqName);
+    }
+    return false;
+}

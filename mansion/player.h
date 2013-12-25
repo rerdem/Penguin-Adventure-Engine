@@ -34,6 +34,7 @@ class Player
 
         bool hasItem(QString searchItem);
         bool isStatus(QString searchStatus);
+        bool meetsReq(QString req, QString reqName);
 
 
     private:
