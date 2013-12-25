@@ -8,6 +8,9 @@
 using namespace std;
 #include <fstream>
 #include <QtGui>
+
+#include <QPushButton>
+#include <QVBoxLayout>
 //#include <QLineEdit>
 #include "gameslide.h"
 #include "player.h"
@@ -28,8 +31,12 @@ public:
     QString imgpath;
     QVector<GameSlide*> slides;
     Player currentplayer;
-    QTextEdit *testEdit;
-    QLabel testLabel;
+
+    QWidget *centralWidget;
+    QVBoxLayout* mainBox;
+    QTextEdit *slideTextEdit;
+    QLabel *slideImageLabel;
+    QPushButton *but01, *but02;
     
 private:
     Ui::mainwindow *ui;

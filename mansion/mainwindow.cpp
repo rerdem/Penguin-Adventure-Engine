@@ -21,15 +21,35 @@ mainwindow::mainwindow(QWidget *parent) :
     //testEdit->show();
     testEdit->append("02");
 
+    QImage myImage;
+    myImage.load("image.jpg");
+    testLabel = new QLabel(this);
+    testLabel->setPixmap(QPixmap::fromImage(myImage));
+    //testLabel.show();
+    **/
 
+    centralWidget = new QWidget(this);
+    this->setCentralWidget( centralWidget );
+
+    but01=new QPushButton("01");
+    but02=new QPushButton("02");
+
+    slideTextEdit = new QTextEdit(this);
+    slideTextEdit->setReadOnly(true);
+    slideTextEdit->append("01");
+    slideTextEdit->append("02");
 
     QImage myImage;
     myImage.load("image.jpg");
+    slideImageLabel = new QLabel(this);
+    slideImageLabel->setPixmap(QPixmap::fromImage(myImage));
 
-    testLabel.setPixmap(QPixmap::fromImage(myImage));
-    testLabel.show();
-    **/
-
+    mainBox = new QVBoxLayout(centralWidget);
+    mainBox->addWidget(slideImageLabel);
+    mainBox->addWidget(but01);
+    mainBox->addWidget(slideTextEdit);
+    mainBox->addWidget(but02);
+    //setLayout(mainBox);
 
 
     /**
@@ -39,7 +59,7 @@ mainwindow::mainwindow(QWidget *parent) :
     setLayout(gridLayout);
     **/
 
-    ui->setupUi(this);
+    //ui->setupUi(this);
 
     //falls kein Pfad für die Datenbanken gegeben, erstelle database-Ordner
     QDir path;
@@ -178,7 +198,7 @@ void mainwindow::initialize()
                                         //qDebug() << attributes.value("req").toString();
                                         //qDebug() << xml.readElementText();
                                     }
-                                    slide->addOptions(goal, req, xml.readElementText());
+                                    slide->addOptions(goal, req, name, xml.readElementText());
                                 }
                                 xml.readNext();
                             }
@@ -191,11 +211,13 @@ void mainwindow::initialize()
                 xml.readNext();
             }
         }
+        /**
         if(token == QXmlStreamReader::EndDocument) {
-            qDebug() << "Ende";
+            //qDebug() << "Ende";
             QMessageBox::information(this, "Information", "Import complete!");
             break;
         }
+        **/
     }
 
     /* Error handling. */
