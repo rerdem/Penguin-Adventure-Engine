@@ -20,11 +20,12 @@ GameSlide::GameSlide()
 }
 
 
-void GameSlide::addOptions(int tempGoal, QString tempReq, QString tempTxt)
+void GameSlide::addOptions(int tempGoal, QString tempReq, QString tempName, QString tempTxt)
 {
     Option tempOption;
     tempOption.goal=tempGoal;
     tempOption.req=tempReq;
+    tempOption.name=tempName;
     tempOption.txt=tempTxt;
     options.append(tempOption);
 }

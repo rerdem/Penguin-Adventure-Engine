@@ -168,7 +168,11 @@ void mainwindow::initialize()
                                                                        tr("Option with req missing name found."),
                                                                         QMessageBox::Ok);
                                         }
-                                        else req="";
+                                        else
+                                        {
+                                            req="";
+                                            name="";
+                                        }
                                         //qDebug() << xml.name().toString();
                                         //qDebug() << attributes.value("slide").toString();
                                         //qDebug() << attributes.value("req").toString();

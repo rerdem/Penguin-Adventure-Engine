@@ -7,6 +7,7 @@
 struct Option {
     int goal;
     QString req;
+    QString name;
     QString txt;
 };
 
@@ -35,7 +36,7 @@ class GameSlide
         void setKarma(int tempKarma) {karma=tempKarma;}
         int getKarma() {return karma;}
 
-        void addOptions(int tempGoal, QString tempReq, QString tempTxt);
+        void addOptions(int tempGoal, QString tempReq, QString tempName, QString tempTxt);
         QVector<Option>& getOptions() {return options;}
 
 
