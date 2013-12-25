@@ -26,7 +26,22 @@ mainwindow::mainwindow(QWidget *parent) :
     fileMenu->addSeparator();
     fileMenu->addAction(tr("&Quit"), this, SLOT(close()));
 
-    but01=new QPushButton("01");
+
+    //ui->setupUi(this);
+
+    //if it doesn't exist, create gamefiles folder
+    QDir path;
+    QDir().mkdir("gamefiles");
+    path = QDir::currentPath() + QDir::separator() +"gamefiles";
+    xmlpath=QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + "adventure.xml";
+    imgpath=QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + + "images" + QDir::separator();
+    //set QString to UTF-8 encoding for special characters
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    initialize();
+
+
+
+    inventoryButton=new QPushButton("Inventory");
     but02=new QPushButton("02");
 
     slideTextEdit = new QTextEdit(this);
@@ -34,37 +49,22 @@ mainwindow::mainwindow(QWidget *parent) :
     slideTextEdit->append("01");
     slideTextEdit->append("02");
 
-    QImage myImage;
-    myImage.load("image.jpg");
+
+    //QImage slideImage;
+    //slideImage.load("image.jpg");
     slideImageLabel = new QLabel(this);
-    slideImageLabel->setPixmap(QPixmap::fromImage(myImage));
+    //slideImageLabel->setPixmap(QPixmap::fromImage(slideImage));
 
     mainBox = new QVBoxLayout(centralWidget);
     mainBox->addWidget(slideImageLabel);
-    mainBox->addWidget(but01);
+    mainBox->addWidget(inventoryButton);
     mainBox->addWidget(slideTextEdit);
     mainBox->addWidget(but02);
     //setLayout(mainBox);
 
 
-    /**
-    QGridLayout *gridLayout = new QGridLayout;
-    gridLayout->addWidget(testLabel, 0, 1);
-    gridLayout->addWidget(testEdit, 1, 1);
-    setLayout(gridLayout);
-    **/
 
-    //ui->setupUi(this);
-
-    //falls kein Pfad für die Datenbanken gegeben, erstelle database-Ordner
-    QDir path;
-    QDir().mkdir("gamefiles");
-    path = QDir::currentPath() + QDir::separator() +"gamefiles";
-    xmlpath=QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + "adventure.xml";
-    imgpath=QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + + "images" + QDir::separator();
-    //setzt QStrings in UTF-8 für Sonderzeichen
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-    initialize();
+    game();
 }
 
 mainwindow::~mainwindow()
@@ -73,13 +73,84 @@ mainwindow::~mainwindow()
 }
 
 
-//textEditBody->setText(tmpMailContent->mailBody.replace("\\linebreak", "\n\r"));
+void mainwindow::game()
+{
 
+    QImage slideImage;
+    for (int i=0; i<slides.size(); i++)
+    {
+        //Slide found
+        if (currentplayer->getLocation()==slides[i]->getId())
+        {
+            //load image
+            slideImage.load(imgpath+slides[i]->getImg());
+            slideImageLabel->setPixmap(QPixmap::fromImage(slideImage));
+            //clear the text area and add text of the new slide
+            slideTextEdit->clear();
+            slideTextEdit->append(slides[i]->getTxt());
+            //compute items change
+            if (!slides[i]->getItems().isEmpty())
+            {
+                QVector<QString> tempItems=slides[i]->getItems();
+                for (int j=0; j<tempItems.size(); j++)
+                {
+                    if (QString::compare(tempItems[j].at(0),"+")==0)
+                    {
+                        if (!currentplayer->hasItem(tempItems[j].mid(1))) currentplayer->addItems(tempItems[j].mid(1));
+                    }
+                    else currentplayer->removeItems(tempItems[j].mid(1));
+                }
+            }
+            //compute stats change
+            if (!slides[i]->getStats().isEmpty())
+            {
+                QVector<QString> tempStats=slides[i]->getStats();
+                for (int j=0; j<tempStats.size(); j++)
+                {
+                    if (QString::compare(tempStats[j].at(0),"+")==0)
+                    {
+                        if (!currentplayer->isStatus(tempStats[j].mid(1))) currentplayer->addStats(tempStats[j].mid(1));
+                    }
+                    else currentplayer->removeStats(tempStats[j].mid(1));
+                }
+            }
+            //compute money change
+            if ((currentplayer->getMoney()+slides[i]->getMoney())<0) currentplayer->setMoney(0);
+            else currentplayer->setMoney(currentplayer->getMoney()+slides[i]->getMoney());
+            //compute karma change
+            currentplayer->setKarma(currentplayer->getKarma()+slides[i]->getKarma());
+            //list options
+            break;
+        }
+    }
+
+
+
+    /**
+    QImage slideImage;
+    slideImage.load("image2.jpg");
+    //slideImageLabel = new QLabel(this);
+    slideImageLabel->setPixmap(QPixmap::fromImage(slideImage));
+    slideTextEdit->clear();
+    slideTextEdit->append("03");
+    **/
+
+    bool breaker=false;
+    //game-Loop
+    while (!breaker)
+    {
+
+        if (currentplayer->getLocation()==-1) breaker=true;
+        breaker=true;
+    }
+}
 
 
 void mainwindow::initialize()
 {
     Q_ASSERT(xmlpath.length()>0);
+
+    currentplayer=new Player();
 
     QFile file(xmlpath);
     if (!file.open(QFile::ReadOnly))

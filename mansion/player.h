@@ -13,9 +13,11 @@ class Player
         QString getName() {return name;}
 
         void addItems(QString tempItem) {items.append(tempItem);}
+        void removeItems(QString tempItem);
         QVector<QString>& getItems() {return items;}
 
         void addStats(QString tempStat) {stats.append(tempStat);}
+        void removeStats(QString tempStat);
         QVector<QString>& getStats() {return stats;}
 
         void setMoney(int tempMoney) {money=tempMoney;}
@@ -29,6 +31,9 @@ class Player
 
         void setLocation(int tempLocation) {location=tempLocation;}
         int getLocation() {return location;}
+
+        bool hasItem(QString searchItem);
+        bool isStatus(QString searchStatus);
 
 
     private:

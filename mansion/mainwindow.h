@@ -30,17 +30,20 @@ public:
     QString xmlpath;
     QString imgpath;
     QVector<GameSlide*> slides;
-    Player currentplayer;
+    Player *currentplayer;
 
     QWidget *centralWidget;
     QVBoxLayout* mainBox;
     QTextEdit *slideTextEdit;
     QLabel *slideImageLabel;
-    QPushButton *but01, *but02;
+    QPushButton *inventoryButton;
+    QPushButton *but02;
+
     
 private:
     Ui::mainwindow *ui;
     void initialize();
+    void game();
 
 private slots:
     //void on_actionSave_triggered();
