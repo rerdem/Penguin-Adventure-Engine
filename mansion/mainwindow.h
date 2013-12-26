@@ -39,19 +39,22 @@ public:
     QTextEdit *slideTextEdit;
     QLabel *slideImageLabel;
     QPushButton *inventoryButton;
-    QPushButton *but02;
-
-    QVector<QPushButton*> optionButtons;
-    QVector<int> buttonRefs;
+    QPushButton *but01, *but02, *but03, *but04, *but05,
+                *but06, *but07, *but08, *but09, *but10;
+    int opt01, opt02, opt03, opt04, opt05,
+        opt06, opt07, opt08, opt09, opt10;
+    //QVector<QPushButton*> optionButtons;
+    //QVector<int> buttonRefs;
 
     
 private:
     Ui::mainwindow *ui;
+    QSignalMapper *signalMapper;
     void initialize();
     void game();
-    void changeSlide(int goalID);
 
 private slots:
+    void changeSlide(const int goalID);
     //void on_actionSave_triggered();
     //void on_actionLoad_triggered();
     //void on_actionAbout_triggered();

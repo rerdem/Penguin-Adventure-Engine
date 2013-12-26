@@ -42,7 +42,54 @@ mainwindow::mainwindow(QWidget *parent) :
 
 
     inventoryButton=new QPushButton("Inventory");
+
+
+    signalMapper = new QSignalMapper(this);
+
+    but01=new QPushButton("01");
     but02=new QPushButton("02");
+    but03=new QPushButton("03");
+    but04=new QPushButton("04");
+    but05=new QPushButton("05");
+    but06=new QPushButton("06");
+    but07=new QPushButton("07");
+    but08=new QPushButton("08");
+    but09=new QPushButton("09");
+    but10=new QPushButton("10");
+    opt01=0;
+    opt02=0;
+    opt03=0;
+    opt04=0;
+    opt05=0;
+    opt06=0;
+    opt07=0;
+    opt08=0;
+    opt09=0;
+    opt10=0;
+    connect(but01, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(but02, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(but03, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(but04, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(but05, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(but06, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(but07, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(but08, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(but09, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    connect(but10, SIGNAL(clicked()), signalMapper, SLOT(map()));
+    signalMapper->setMapping(but01, opt01);
+    signalMapper->setMapping(but02, opt02);
+    signalMapper->setMapping(but03, opt03);
+    signalMapper->setMapping(but04, opt04);
+    signalMapper->setMapping(but05, opt05);
+    signalMapper->setMapping(but06, opt06);
+    signalMapper->setMapping(but07, opt07);
+    signalMapper->setMapping(but08, opt08);
+    signalMapper->setMapping(but09, opt09);
+    signalMapper->setMapping(but10, opt10);
+    connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(changeSlide(int)));
+
+
+
 
     slideTextEdit = new QTextEdit(this);
     slideTextEdit->setReadOnly(true);
@@ -64,9 +111,27 @@ mainwindow::mainwindow(QWidget *parent) :
     mainBox->addWidget(slideImageLabel, 0, 0, 1, 5);
     mainBox->addWidget(inventoryButton, 1, 0, 1, 5);
     mainBox->addWidget(slideTextEdit, 2, 0, 1, 5);
-    //mainBox->addWidget(but02);
+    mainBox->addWidget(but01, 3, 0);
+    mainBox->addWidget(but02, 3, 1);
+    mainBox->addWidget(but03, 3, 2);
+    mainBox->addWidget(but04, 3, 3);
+    mainBox->addWidget(but05, 3, 4);
+    mainBox->addWidget(but06, 4, 0);
+    mainBox->addWidget(but07, 4, 1);
+    mainBox->addWidget(but08, 4, 2);
+    mainBox->addWidget(but09, 4, 3);
+    mainBox->addWidget(but10, 4, 4);
     //setLayout(mainBox);
-
+    but01->hide();
+    but02->hide();
+    but03->hide();
+    but04->hide();
+    but05->hide();
+    but06->hide();
+    but07->hide();
+    but08->hide();
+    but09->hide();
+    but10->hide();
 
 
     game();
@@ -78,7 +143,7 @@ mainwindow::~mainwindow()
 }
 
 
-void mainwindow::changeSlide(int goalID)
+void mainwindow::changeSlide( const int goalID)
 {
     if (goalID==-1) QMessageBox::information(this, "Congratulations!", "You win!");
     else
@@ -141,37 +206,106 @@ void mainwindow::game()
             //list options
             if (!slides[i]->getOptions().isEmpty())
             {
-                //if there are optionButtons, delete them
-                if (!optionButtons.isEmpty())
+                //if there are optionButtons visible, hide them
+                if (but01->isVisible())
                 {
-                    for (int j=0; j<optionButtons.size(); j++) disconnect(optionButtons[j], SIGNAL(clicked()), this, SLOT(changeSlide(buttonRefs[j])));
-                    for (int j=0; j<optionButtons.size(); j++) delete optionButtons[j];
-                    optionButtons.clear();
-                    buttonRefs.clear();
+                    but01->hide();
+                    but02->hide();
+                    but03->hide();
+                    but04->hide();
+                    but05->hide();
+                    but06->hide();
+                    but07->hide();
+                    but08->hide();
+                    but09->hide();
+                    but10->hide();
                 }
 
                 QVector<Option> tempOptions=slides[i]->getOptions();
+                int optionCounter=0;
                 for (int j=0; j<tempOptions.size(); j++)
                 {
                     //enforcing maximum of 10 Options
-                    if (optionButtons.size()==10) break;
+                    if (optionCounter==10) break;
                     //qDebug() << tempOptions[j].req;
                     if (currentplayer->meetsReq(tempOptions[j].req, tempOptions[j].name))
                     {
                         //QMessageBox::critical(this, tr("Error!"), tr("Options found!"), QMessageBox::Ok);
-                        QPushButton *tempButton = new QPushButton(tempOptions[j].txt);
-                        optionButtons.append(tempButton);
-                        buttonRefs.append(tempOptions[j].goal);
-                        //connect(quit, SIGNAL(clicked()), qApp, SLOT(quit()));
+                        switch(optionCounter)
+                        {
+                        case 0:
+                            but01->setText(tempOptions[j].txt);
+                            opt01=tempOptions[j].goal;
+                            signalMapper->removeMappings(but01);
+                            signalMapper->setMapping(but01, opt01);
+                            but01->show();
+                            break;
+                        case 1:
+                            but02->setText(tempOptions[j].txt);
+                            opt02=tempOptions[j].goal;
+                            signalMapper->removeMappings(but02);
+                            signalMapper->setMapping(but02, opt02);
+                            but02->show();
+                            break;
+                        case 2:
+                            but03->setText(tempOptions[j].txt);
+                            opt03=tempOptions[j].goal;
+                            signalMapper->removeMappings(but03);
+                            signalMapper->setMapping(but03, opt03);
+                            but03->show();
+                            break;
+                        case 3:
+                            but04->setText(tempOptions[j].txt);
+                            opt04=tempOptions[j].goal;
+                            signalMapper->removeMappings(but04);
+                            signalMapper->setMapping(but04, opt04);
+                            but04->show();
+                            break;
+                        case 4:
+                            but05->setText(tempOptions[j].txt);
+                            opt05=tempOptions[j].goal;
+                            signalMapper->removeMappings(but05);
+                            signalMapper->setMapping(but05, opt05);
+                            but05->show();
+                            break;
+                        case 5:
+                            but06->setText(tempOptions[j].txt);
+                            opt06=tempOptions[j].goal;
+                            signalMapper->removeMappings(but06);
+                            signalMapper->setMapping(but06, opt06);
+                            but06->show();
+                            break;
+                        case 6:
+                            but07->setText(tempOptions[j].txt);
+                            opt07=tempOptions[j].goal;
+                            signalMapper->removeMappings(but07);
+                            signalMapper->setMapping(but07, opt07);
+                            but07->show();
+                            break;
+                        case 7:
+                            but08->setText(tempOptions[j].txt);
+                            opt08=tempOptions[j].goal;
+                            signalMapper->removeMappings(but08);
+                            signalMapper->setMapping(but08, opt08);
+                            but08->show();
+                            break;
+                        case 8:
+                            but09->setText(tempOptions[j].txt);
+                            opt09=tempOptions[j].goal;
+                            signalMapper->removeMappings(but09);
+                            signalMapper->setMapping(but09, opt09);
+                            but09->show();
+                            break;
+                        case 9:
+                            but10->setText(tempOptions[j].txt);
+                            opt10=tempOptions[j].goal;
+                            signalMapper->removeMappings(but10);
+                            signalMapper->setMapping(but10, opt10);
+                            but10->show();
+                            break;
+                        }
                     }
                 }
-                for (int j=0; j<optionButtons.size(); j++)
-                {
-                    QObject::connect(optionButtons[j], SIGNAL(clicked()), this, SLOT(changeSlide(buttonRefs[j])));
-                    if (j<=5) mainBox->addWidget(optionButtons[j], j+3, j);
-                    if (j>5) mainBox->addWidget(optionButtons[j], j+3, j-5);
-                }
-
             }
             else QMessageBox::critical(this, tr("Error!"),
                                        tr("No options found!"),
