@@ -4,6 +4,8 @@
 #include <QtGui>
 #include <QMessageBox>
 #include <vector>
+
+#include <cstdlib> //itoa()
 //#include <QFileDialog>
 
 #include "gameslide.h"
@@ -21,6 +23,7 @@ mainwindow::mainwindow(QWidget *parent) :
     menuBar()->addMenu(fileMenu);
     fileMenu->addAction(tr("&About"), this, SLOT(about()));
     fileMenu->addSeparator();
+    fileMenu->addAction(tr("&New Game"), this, SLOT(reset()));
     fileMenu->addAction(tr("&Save"), this, SLOT(save()));
     fileMenu->addAction(tr("&Load"), this, SLOT(load()));
     fileMenu->addSeparator();
@@ -40,9 +43,8 @@ mainwindow::mainwindow(QWidget *parent) :
     initialize();
 
 
-
     inventoryButton=new QPushButton("Inventory");
-
+    connect(inventoryButton, SIGNAL(clicked()), this, SLOT(showInventory()));
 
     signalMapper = new QSignalMapper(this);
 
@@ -93,8 +95,8 @@ mainwindow::mainwindow(QWidget *parent) :
 
     slideTextEdit = new QTextEdit(this);
     slideTextEdit->setReadOnly(true);
-    slideTextEdit->append("01");
-    slideTextEdit->append("02");
+    //slideTextEdit->append("01");
+    //slideTextEdit->append("02");
 
 
     //QImage slideImage;
@@ -136,6 +138,32 @@ mainwindow::~mainwindow()
     delete ui;
 }
 
+void mainwindow::showInventory()
+{
+    inventoryScreen i;
+    i.showPlayer(*currentplayer);
+    i.exec();
+}
+
+void mainwindow::reset()
+{
+    bool ok;
+    QString text = QInputDialog::getText(this, "What is your name?","What is your name?", QLineEdit::Normal,"", &ok);
+    if ( ok && !text.isEmpty() ) {
+        //user entered something and pressed OK
+        currentplayer->setName(text);
+    }
+    else currentplayer->setName("Player01");
+    currentplayer->setMoney(0);
+    currentplayer->setKarma(0);
+    currentplayer->clearItems();
+    currentplayer->clearStats();
+    currentplayer->setGameovers(0);
+    currentplayer->setLocation(0);
+    currentplayer->setPrevLocation(0);
+    game();
+}
+
 void mainwindow::about()
 {
     QFile file;
@@ -168,6 +196,7 @@ void mainwindow::about()
     }
     QMessageBox::information(this, "About", showString);
 }
+
 
 void mainwindow::load()
 {
@@ -277,8 +306,12 @@ void mainwindow::changeSlide( const int goalID)
     if (goalID==-1)
     {
         int score=referee->scorePlayer(*currentplayer);
+        char temp[15];
+        itoa(score, temp, 10);
         qDebug() << score;
-        QMessageBox::information(this, "Congratulations!", "You win! Your score is: "+score);
+        QString winMessage="You win!\nYour score is: ";
+        winMessage.append(temp);
+        QMessageBox::information(this, "Congratulations!", winMessage);
         //currentplayer->setLocation(0);
         //game();
     }
@@ -479,6 +512,15 @@ void mainwindow::initialize()
     Q_ASSERT(xmlpath.length()>0);
 
     currentplayer=new Player();
+
+    bool ok;
+    QString text = QInputDialog::getText(this, "What is your name?","What is your name?", QLineEdit::Normal,"", &ok);
+    if ( ok && !text.isEmpty() ) {
+        //user entered something and pressed OK
+        currentplayer->setName(text);
+    }
+
+
     referee=new Scorer();
 
     QFile file(xmlpath);

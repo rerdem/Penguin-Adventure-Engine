@@ -12,7 +12,7 @@
 
 Player::Player()
 {
-    name="Testplayer";
+    name="Player01";
     money=0;
     karma=0;
     gameovers=0;
@@ -26,6 +26,7 @@ void Player::clearItems()
     {
         items.remove(i);
     }
+    items.clear();
 }
 
 void Player::clearStats()
@@ -34,6 +35,7 @@ void Player::clearStats()
     {
         stats.remove(i);
     }
+    stats.clear();
 }
 
 

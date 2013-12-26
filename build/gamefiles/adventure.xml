@@ -16,8 +16,8 @@
 			<item>-Book</item>
 		</items>
 		<stats>
-			<stat>+Curse</stat>
-			<stat>-Confusion</stat>
+			<stat>+Cursed</stat>
+			<stat>-Confused</stat>
 			<stat>-Panic</stat>
 		</stats>
 		<money>-5</money>

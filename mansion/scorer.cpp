@@ -63,11 +63,13 @@ Scorer::Scorer()
             if (status==misc)
             {
                 splitter=tempString.split(":");
-                qDebug() << "Parse Misc Name " << splitter[0] << endl;
-                qDebug() << "Parse Misc Value " << splitter[1].toInt() << endl;
-                if (QString::compare(splitter[0], "money", Qt::CaseInsensitive)) money=splitter[1].toInt();
-                if (QString::compare(splitter[0], "karma", Qt::CaseInsensitive)) karma=splitter[1].toInt();
-                if (QString::compare(splitter[0], "gameovers", Qt::CaseInsensitive)) gameovers=splitter[1].toInt();
+                //qDebug() << "Parse Misc Name " << splitter[0] << endl;
+                //qDebug() << "Parse Misc Value " << splitter[1].toInt() << endl;
+                if (QString::compare(splitter[0], "money", Qt::CaseInsensitive)==0) money=splitter[1].toInt();
+                if (QString::compare(splitter[0], "karma", Qt::CaseInsensitive)==0) karma=splitter[1].toInt();
+                if (QString::compare(splitter[0], "gameovers", Qt::CaseInsensitive)==0) gameovers=splitter[1].toInt();
+                //qDebug() << "Parse MiscSave money karma over" << endl;
+                //qDebug() << "Parse MiscSave " << money << " " << karma << " " << gameovers << endl;
             }
             else {
                 splitter=tempString.split(":");
@@ -77,8 +79,9 @@ Scorer::Scorer()
                 tempItemStat.name=splitter[0];
                 tempItemStat.value=splitter[1].toInt();
                 itemstats.append(tempItemStat);
-                qDebug() << "Parse imtestat Name " << splitter[0] << endl;
-                qDebug() << "Parse itemstat Value " << splitter[1] << endl;
+                //qDebug() << "Parse itemstat Name " << splitter[0] << endl;
+                //qDebug() << "Parse item " << tempItemStat.item << endl;
+                //qDebug() << "Parse itemstat Value " << splitter[1] << endl;
             }
         }
         file.close();
@@ -89,29 +92,33 @@ int Scorer::scorePlayer(Player toScore)
 {
     int finalScore=0;
     int tempNumber=0;
-    qDebug() << "Score Beginning " << finalScore << " " << tempNumber << endl;
+    //qDebug() << "Score Beginning " << finalScore << " " << tempNumber << endl;
     //add money
     tempNumber=toScore.getMoney();
     finalScore=finalScore+(money*tempNumber);
-    qDebug() << "Score Money " << finalScore << " " << tempNumber << endl;
+    //qDebug() << "Score Money " << finalScore << " " << tempNumber << endl;
     //add karma
     tempNumber=toScore.getKarma();
     finalScore=finalScore+(karma*tempNumber);
-    qDebug() << "Score Karma " << finalScore << " " << tempNumber << endl;
+    //qDebug() << "Score Karma " << finalScore << " " << tempNumber << endl;
     //add gameovers
     tempNumber=toScore.getGameovers();
-    finalScore=finalScore+(money*tempNumber);
-    qDebug() << "Score Gameovers " << finalScore << " " << tempNumber << endl;
+    finalScore=finalScore+(gameovers*tempNumber);
+    //qDebug() << "Score Gameovers " << finalScore << " " << tempNumber << endl;
     //add items
     QVector<QString> tempVector=toScore.getItems();
     for (int i=0; i<tempVector.size(); i++)
     {
         for (int j=0; j<itemstats.size(); j++)
         {
-            if ((itemstats[j].item) && (QString::compare(tempVector[i], itemstats[j].name, Qt::CaseInsensitive)==0)) finalScore+=itemstats[j].value;
+            if ((itemstats[j].item) && (QString::compare(tempVector[i], itemstats[j].name, Qt::CaseInsensitive)==0))
+            {
+                finalScore+=itemstats[j].value;
+                break;
+            }
         }
     }
-    qDebug() << "Score Items " << finalScore << endl;
+    //qDebug() << "Score Items " << finalScore << endl;
     //add stats
     tempVector.clear();
     tempVector=toScore.getStats();
@@ -119,10 +126,15 @@ int Scorer::scorePlayer(Player toScore)
     {
         for (int j=0; j<itemstats.size(); j++)
         {
-            if ((!itemstats[j].item) && (QString::compare(tempVector[i], itemstats[j].name, Qt::CaseInsensitive)==0)) finalScore+=itemstats[j].value;
+            if (!itemstats[j].item)
+                if (QString::compare(tempVector[i], itemstats[j].name, Qt::CaseInsensitive)==0)
+                {
+                    finalScore+=itemstats[j].value;
+                    break;
+                }
         }
     }
-    qDebug() << "Score Stats " << finalScore << endl;
+    //qDebug() << "Score Stats " << finalScore << endl;
 
     return finalScore;
 }

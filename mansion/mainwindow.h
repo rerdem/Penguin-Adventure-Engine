@@ -16,6 +16,7 @@ using namespace std;
 #include "gameslide.h"
 #include "player.h"
 #include "scorer.h"
+#include "inventoryscreen.h"
 
 namespace Ui {
 class mainwindow;
@@ -57,6 +58,8 @@ private slots:
     void save();
     void load();
     void about();
+    void reset();
+    void showInventory();
     //void on_actionSave_triggered();
     //void on_actionLoad_triggered();
     //void on_actionAbout_triggered();

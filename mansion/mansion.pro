@@ -14,11 +14,13 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     gameslide.cpp \
     player.cpp \
-    scorer.cpp
+    scorer.cpp \
+    inventoryscreen.cpp
 
 HEADERS  += mainwindow.h \
     gameslide.h \
     player.h \
-    scorer.h
+    scorer.h \
+    inventoryscreen.h
 
 FORMS    += mainwindow.ui
