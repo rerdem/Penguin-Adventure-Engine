@@ -274,7 +274,14 @@ void mainwindow::save()
 
 void mainwindow::changeSlide( const int goalID)
 {
-    if (goalID==-1) QMessageBox::information(this, "Congratulations!", "You win!");
+    if (goalID==-1)
+    {
+        int score=referee->scorePlayer(*currentplayer);
+        qDebug() << score;
+        QMessageBox::information(this, "Congratulations!", "You win! Your score is: "+score);
+        //currentplayer->setLocation(0);
+        //game();
+    }
     else
     {
         currentplayer->setPrevLocation(currentplayer->getLocation());
@@ -472,6 +479,7 @@ void mainwindow::initialize()
     Q_ASSERT(xmlpath.length()>0);
 
     currentplayer=new Player();
+    referee=new Scorer();
 
     QFile file(xmlpath);
     if (!file.open(QFile::ReadOnly))

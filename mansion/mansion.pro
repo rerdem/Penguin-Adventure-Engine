@@ -13,10 +13,12 @@ TEMPLATE = app
 SOURCES += main.cpp\
         mainwindow.cpp \
     gameslide.cpp \
-    player.cpp
+    player.cpp \
+    scorer.cpp
 
 HEADERS  += mainwindow.h \
     gameslide.h \
-    player.h
+    player.h \
+    scorer.h
 
 FORMS    += mainwindow.ui

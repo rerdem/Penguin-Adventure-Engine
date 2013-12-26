@@ -15,6 +15,7 @@ using namespace std;
 //#include <QLineEdit>
 #include "gameslide.h"
 #include "player.h"
+#include "scorer.h"
 
 namespace Ui {
 class mainwindow;
@@ -32,6 +33,7 @@ public:
     QString imgpath;
     QVector<GameSlide*> slides;
     Player *currentplayer;
+    Scorer *referee;
 
     QWidget *centralWidget;
     QGridLayout *mainBox;

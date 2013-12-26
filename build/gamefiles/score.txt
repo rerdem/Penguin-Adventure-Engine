@@ -4,6 +4,7 @@ gameovers:-10
 
 /items
 Key:10
+Stone:10
 
 /stats
 cursed:-50
