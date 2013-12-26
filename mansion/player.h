@@ -12,12 +12,14 @@ class Player
         void setName(QString tempName) {name=tempName;}
         QString getName() {return name;}
 
-        void addItems(QString tempItem) {items.append(tempItem);}
-        void removeItems(QString tempItem);
+        void addItem(QString tempItem) {items.append(tempItem);}
+        void removeItem(QString tempItem);
+        void clearItems();
         QVector<QString>& getItems() {return items;}
 
-        void addStats(QString tempStat) {stats.append(tempStat);}
-        void removeStats(QString tempStat);
+        void addStat(QString tempStat) {stats.append(tempStat);}
+        void removeStat(QString tempStat);
+        void clearStats();
         QVector<QString>& getStats() {return stats;}
 
         void setMoney(int tempMoney) {money=tempMoney;}

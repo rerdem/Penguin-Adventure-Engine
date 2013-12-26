@@ -34,8 +34,7 @@ public:
     Player *currentplayer;
 
     QWidget *centralWidget;
-    //QVBoxLayout* mainBox;
-    QGridLayout* mainBox;
+    QGridLayout *mainBox;
     QTextEdit *slideTextEdit;
     QLabel *slideImageLabel;
     QPushButton *inventoryButton;
@@ -43,8 +42,6 @@ public:
                 *but06, *but07, *but08, *but09, *but10;
     int opt01, opt02, opt03, opt04, opt05,
         opt06, opt07, opt08, opt09, opt10;
-    //QVector<QPushButton*> optionButtons;
-    //QVector<int> buttonRefs;
 
     
 private:
@@ -55,6 +52,8 @@ private:
 
 private slots:
     void changeSlide(const int goalID);
+    void save();
+    void load();
     //void on_actionSave_triggered();
     //void on_actionLoad_triggered();
     //void on_actionAbout_triggered();

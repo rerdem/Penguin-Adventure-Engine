@@ -21,8 +21,8 @@ mainwindow::mainwindow(QWidget *parent) :
     menuBar()->addMenu(fileMenu);
     fileMenu->addAction(tr("&About"), this, SLOT(close()));
     fileMenu->addSeparator();
-    fileMenu->addAction(tr("&Save"), this, SLOT(close()));
-    fileMenu->addAction(tr("&Load"), this, SLOT(close()));
+    fileMenu->addAction(tr("&Save"), this, SLOT(save()));
+    fileMenu->addAction(tr("&Load"), this, SLOT(load()));
     fileMenu->addSeparator();
     fileMenu->addAction(tr("&Quit"), this, SLOT(close()));
 
@@ -102,11 +102,6 @@ mainwindow::mainwindow(QWidget *parent) :
     slideImageLabel = new QLabel(this);
     //slideImageLabel->setPixmap(QPixmap::fromImage(slideImage));
 
-    //mainBox = new QVBoxLayout(centralWidget);
-    //mainBox->addWidget(slideImageLabel);
-    //mainBox->addWidget(inventoryButton);
-    //mainBox->addWidget(slideTextEdit);
-    //mainBox->addWidget(but02);
     mainBox = new QGridLayout(centralWidget);
     mainBox->addWidget(slideImageLabel, 0, 0, 1, 5);
     mainBox->addWidget(inventoryButton, 1, 0, 1, 5);
@@ -121,7 +116,7 @@ mainwindow::mainwindow(QWidget *parent) :
     mainBox->addWidget(but08, 4, 2);
     mainBox->addWidget(but09, 4, 3);
     mainBox->addWidget(but10, 4, 4);
-    //setLayout(mainBox);
+
     but01->hide();
     but02->hide();
     but03->hide();
@@ -133,13 +128,115 @@ mainwindow::mainwindow(QWidget *parent) :
     but09->hide();
     but10->hide();
 
-
     game();
 }
 
 mainwindow::~mainwindow()
 {
     delete ui;
+}
+
+
+void mainwindow::load()
+{
+    QFileDialog dialog(this);
+    QString fileName;
+    QFile file;
+
+    dialog.setFileMode(QFileDialog::AnyFile);
+    fileName = dialog.getOpenFileName(this, tr("Load..."), ".", tr("Savegame (*.sav)"));
+
+    if (fileName.isNull()==false)
+    {
+        file.setFileName(fileName);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QMessageBox::warning(this, tr("File Error"),
+                           tr("The following file cannot be opened: ") + fileName, QMessageBox::Ok);
+        }
+
+        QTextStream in(&file);
+        QString tempString;
+        QStringList tempStringList;
+
+
+
+        if (in.status() == QTextStream::Ok)
+        {
+            //read Name
+            tempString=in.readLine();
+            if (QString::compare(tempString, "")==0) QMessageBox::warning(this, tr("File Error"), tr("This file is incompatible!"), QMessageBox::Ok);
+            else currentplayer->setName(tempString);
+            //read Inventory
+            tempString=in.readLine();
+            tempStringList=tempString.split("@");
+            for (int i=0; i<tempStringList.length(); i++) currentplayer->addItem(tempStringList[i]);
+            //read Stats
+            tempString=in.readLine();
+            tempStringList=tempString.split("@");
+            for (int i=0; i<tempStringList.length(); i++) currentplayer->addStat(tempStringList[i]);
+            //read money
+            tempString=in.readLine();
+            if (QString::compare(tempString, "")==0) QMessageBox::warning(this, tr("File Error"), tr("This file is incompatible!"), QMessageBox::Ok);
+            else currentplayer->setMoney(tempString.toInt());
+            //read karma
+            tempString=in.readLine();
+            if (QString::compare(tempString, "")==0) QMessageBox::warning(this, tr("File Error"), tr("This file is incompatible!"), QMessageBox::Ok);
+            else currentplayer->setKarma(tempString.toInt());
+            //read gameovers
+            tempString=in.readLine();
+            if (QString::compare(tempString, "")==0) QMessageBox::warning(this, tr("File Error"), tr("This file is incompatible!"), QMessageBox::Ok);
+            else currentplayer->setGameovers(tempString.toInt());
+            //read location
+            tempString=in.readLine();
+            if (QString::compare(tempString, "")==0) QMessageBox::warning(this, tr("File Error"), tr("This file is incompatible!"), QMessageBox::Ok);
+            else currentplayer->setLocation(tempString.toInt());
+            //read prevLocation
+            tempString=in.readLine();
+            if (QString::compare(tempString, "")==0) QMessageBox::warning(this, tr("File Error"), tr("This file is incompatible!"), QMessageBox::Ok);
+            else currentplayer->setPrevLocation(tempString.toInt());
+            tempString=in.readLine();
+        }
+        file.close();
+        game();
+    }
+}
+
+
+void mainwindow::save()
+{
+    QFileDialog dialog(this);
+    QString fileName;
+    QFile file;
+
+    dialog.setFileMode(QFileDialog::AnyFile);
+    fileName = dialog.getSaveFileName(this, tr("Save as..."), ".", tr("Savegame (*.sav)"));
+
+    if (fileName.isNull()==false)
+    {
+        file.setFileName(fileName);
+        if (!file.open(QIODevice::WriteOnly | QIODevice::Text))
+        {
+            QMessageBox::warning(this, tr("File Error"),
+                           tr("The following file cannot be used: ") + fileName, QMessageBox::Ok);
+        }
+
+        QTextStream out(&file);
+
+        out  << currentplayer->getName() << endl;
+        QVector<QString> itemsOut=currentplayer->getItems();
+        for (int i=0; i<itemsOut.size(); i++) out  << itemsOut[i] << "@";
+        out  << endl;
+        QVector<QString> statsOut=currentplayer->getStats();
+        for (int i=0; i<statsOut.size(); i++) out  << statsOut[i] << "@";
+        out  << endl;
+        out  << currentplayer->getMoney() << endl;
+        out  << currentplayer->getKarma() << endl;
+        out  << currentplayer->getGameovers() << endl;
+        out  << currentplayer->getLocation() << endl;
+        out  << currentplayer->getPrevLocation() << endl;
+        file.close();
+    }
 }
 
 
@@ -178,9 +275,9 @@ void mainwindow::game()
                 {
                     if (QString::compare(tempItems[j].at(0),"+")==0)
                     {
-                        if (!currentplayer->hasItem(tempItems[j].mid(1))) currentplayer->addItems(tempItems[j].mid(1));
+                        if (!currentplayer->hasItem(tempItems[j].mid(1))) currentplayer->addItem(tempItems[j].mid(1));
                     }
-                    else currentplayer->removeItems(tempItems[j].mid(1));
+                    else currentplayer->removeItem(tempItems[j].mid(1));
                 }
             }
             //compute stats change
@@ -191,9 +288,9 @@ void mainwindow::game()
                 {
                     if (QString::compare(tempStats[j].at(0),"+")==0)
                     {
-                        if (!currentplayer->isStatus(tempStats[j].mid(1))) currentplayer->addStats(tempStats[j].mid(1));
+                        if (!currentplayer->isStatus(tempStats[j].mid(1))) currentplayer->addStat(tempStats[j].mid(1));
                     }
-                    else currentplayer->removeStats(tempStats[j].mid(1));
+                    else currentplayer->removeStat(tempStats[j].mid(1));
                 }
             }
             //compute money change
@@ -227,7 +324,7 @@ void mainwindow::game()
                 {
                     //enforcing maximum of 10 Options
                     if (optionCounter==10) break;
-                    //qDebug() << tempOptions[j].req;
+                    //qDebug() << tempOptions[j].req << tempOptions[j].name << currentplayer->meetsReq(tempOptions[j].req, tempOptions[j].name);
                     if (currentplayer->meetsReq(tempOptions[j].req, tempOptions[j].name))
                     {
                         //QMessageBox::critical(this, tr("Error!"), tr("Options found!"), QMessageBox::Ok);
@@ -304,6 +401,7 @@ void mainwindow::game()
                             but10->show();
                             break;
                         }
+                        optionCounter++;
                     }
                 }
             }
@@ -354,7 +452,7 @@ void mainwindow::initialize()
 
     GameSlide *slide;
     int goal;
-    QString req, name;
+    QString req, name, textReplacer;
     QXmlStreamAttributes attributes;
 
     QXmlStreamReader xml(&file);
@@ -387,7 +485,17 @@ void mainwindow::initialize()
                             //qDebug() << xml.readElementText();
                         }
                         if(xml.name() == "txt") {
-                            slide->setTxt(xml.readElementText());
+                            textReplacer=xml.readElementText();
+                            //add HTML tags
+                            textReplacer.replace("*br*", "<br>");
+                            textReplacer.replace("*b*", "<b>");
+                            textReplacer.replace("*/b*", "</b>");
+                            textReplacer.replace("*i*", "<i>");
+                            textReplacer.replace("*/i*", "</i>");
+                            textReplacer.replace("*u*", "<u>");
+                            textReplacer.replace("*/u*", "</u>");
+                            slide->setTxt(textReplacer);
+                            //slide->setTxt(xml.readElementText());
                             //qDebug() << xml.name().toString();
                             //qDebug() << xml.readElementText();
                         }

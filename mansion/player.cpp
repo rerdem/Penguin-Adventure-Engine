@@ -20,7 +20,24 @@ Player::Player()
     prevLocation=0;
 }
 
-void Player::removeItems(QString tempItem)
+void Player::clearItems()
+{
+    for (int i=0; i<items.size(); i++)
+    {
+        items.remove(i);
+    }
+}
+
+void Player::clearStats()
+{
+    for (int i=0; i<stats.size(); i++)
+    {
+        stats.remove(i);
+    }
+}
+
+
+void Player::removeItem(QString tempItem)
 {
     for (int i=0; i<items.size(); i++)
     {
@@ -28,7 +45,7 @@ void Player::removeItems(QString tempItem)
     }
 }
 
-void Player::removeStats(QString tempStat)
+void Player::removeStat(QString tempStat)
 {
     for (int i=0; i<stats.size(); i++)
     {

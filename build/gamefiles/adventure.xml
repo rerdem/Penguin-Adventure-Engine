@@ -2,7 +2,7 @@
 <game>
 	<slide id="0">
 		<img>image.jpg</img>
-		<txt>Welcome Slide</txt>
+		<txt>*b*Welcome*/b**br* Slide</txt>
 		<options>
 			<option slide="1">Continue</option>
 		</options>
