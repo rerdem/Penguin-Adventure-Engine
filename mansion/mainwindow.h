@@ -54,6 +54,7 @@ private slots:
     void changeSlide(const int goalID);
     void save();
     void load();
+    void about();
     //void on_actionSave_triggered();
     //void on_actionLoad_triggered();
     //void on_actionAbout_triggered();

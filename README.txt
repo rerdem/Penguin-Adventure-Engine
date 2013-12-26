@@ -6,6 +6,5 @@ This will also contain the Choose-Your-Own-Adventure story
 
 future to do
 -------------------------------
-Save/Load
 config
 XML debugger

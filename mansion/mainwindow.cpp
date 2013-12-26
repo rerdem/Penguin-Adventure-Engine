@@ -19,7 +19,7 @@ mainwindow::mainwindow(QWidget *parent) :
 
     QMenu *fileMenu = new QMenu(tr("&File"), this);
     menuBar()->addMenu(fileMenu);
-    fileMenu->addAction(tr("&About"), this, SLOT(close()));
+    fileMenu->addAction(tr("&About"), this, SLOT(about()));
     fileMenu->addSeparator();
     fileMenu->addAction(tr("&Save"), this, SLOT(save()));
     fileMenu->addAction(tr("&Load"), this, SLOT(load()));
@@ -136,6 +136,38 @@ mainwindow::~mainwindow()
     delete ui;
 }
 
+void mainwindow::about()
+{
+    QFile file;
+    QString fileName;
+    fileName = QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + "credits.txt";
+
+    QString showString;
+    showString="This game runs on the Penguin Adventure Engine!\n\n";
+    if (fileName.isNull()==false)
+    {
+        file.setFileName(fileName);
+        if (!file.open(QIODevice::ReadOnly | QIODevice::Text))
+        {
+            QMessageBox::warning(this, tr("File Error"),
+                           tr("The following file cannot be opened: ") + fileName, QMessageBox::Ok);
+        }
+
+        QTextStream in(&file);
+        QString tempString;
+
+        while ((in.status() == QTextStream::Ok) && (!in.atEnd()))
+        {
+            //read Name
+            tempString=in.readLine();
+            if (in.status() == QTextStream::ReadPastEnd) break;
+            if (QString::compare(tempString, "")!=0) showString.append(tempString);
+            showString.append("\n");
+        }
+        file.close();
+    }
+    QMessageBox::information(this, "About", showString);
+}
 
 void mainwindow::load()
 {
