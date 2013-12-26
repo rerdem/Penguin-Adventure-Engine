@@ -2,7 +2,7 @@
 #define PLAYER_H
 
 #include <QString>
-//#include <QtGui>
+
 
 class Player
 {

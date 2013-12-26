@@ -1,14 +1,9 @@
 #include <QString>
-//#include <QDir>
-//#include <QtCore>
-//#include <QtGui>
-//#include <QMessageBox>
-#include <vector>
-//#include <QFileDialog>
-
+#include <QVector>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "player.h"
+
 
 Player::Player()
 {
@@ -20,6 +15,7 @@ Player::Player()
     prevLocation=0;
 }
 
+
 void Player::clearItems()
 {
     for (int i=0; i<items.size(); i++)
@@ -28,6 +24,7 @@ void Player::clearItems()
     }
     items.clear();
 }
+
 
 void Player::clearStats()
 {
@@ -47,6 +44,7 @@ void Player::removeItem(QString tempItem)
     }
 }
 
+
 void Player::removeStat(QString tempStat)
 {
     for (int i=0; i<stats.size(); i++)
@@ -54,6 +52,7 @@ void Player::removeStat(QString tempStat)
         if (QString::compare(stats[i], tempStat, Qt::CaseInsensitive)==0) stats.remove(i);
     }
 }
+
 
 bool Player::hasItem(QString searchItem)
 {
@@ -64,6 +63,7 @@ bool Player::hasItem(QString searchItem)
     return false;
 }
 
+
 bool Player::isStatus(QString searchStatus)
 {
     for (int i=0; i<stats.size(); i++)
@@ -72,6 +72,7 @@ bool Player::isStatus(QString searchStatus)
     }
     return false;
 }
+
 
 bool Player::meetsReq(QString req, QString reqName)
 {

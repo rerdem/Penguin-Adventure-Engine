@@ -2,21 +2,19 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-
 #include <QString>
 #include <iostream>
 using namespace std;
 #include <fstream>
 #include <QtGui>
-
 #include <QPushButton>
 #include <QVBoxLayout>
 #include <QHBoxLayout>
-//#include <QLineEdit>
 #include "gameslide.h"
 #include "player.h"
 #include "scorer.h"
 #include "inventoryscreen.h"
+
 
 namespace Ui {
 class mainwindow;
@@ -29,9 +27,10 @@ class mainwindow : public QMainWindow
 public:
     explicit mainwindow(QWidget *parent = 0);
     ~mainwindow();
+    
+private:
+    Ui::mainwindow *ui;
 
-    QString xmlpath;
-    QString imgpath;
     QVector<GameSlide*> slides;
     Player *currentplayer;
     Scorer *referee;
@@ -46,10 +45,11 @@ public:
     int opt01, opt02, opt03, opt04, opt05,
         opt06, opt07, opt08, opt09, opt10;
 
-    
-private:
-    Ui::mainwindow *ui;
+    QString xmlpath;
+    QString imgpath;
     QSignalMapper *signalMapper;
+
+    void createInterface();
     void initialize();
     void game();
 
@@ -60,9 +60,6 @@ private slots:
     void about();
     void reset();
     void showInventory();
-    //void on_actionSave_triggered();
-    //void on_actionLoad_triggered();
-    //void on_actionAbout_triggered();
 };
 
 #endif // MAINWINDOW_H

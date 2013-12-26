@@ -1,14 +1,9 @@
 #include <QString>
-//#include <QDir>
-//#include <QtCore>
-//#include <QtGui>
-//#include <QMessageBox>
-#include <vector>
-//#include <QFileDialog>
-
+#include <QVector>
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
 #include "gameslide.h"
+
 
 GameSlide::GameSlide()
 {

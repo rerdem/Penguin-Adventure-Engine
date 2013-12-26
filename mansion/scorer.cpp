@@ -1,19 +1,13 @@
 #include <QString>
 #include <QDir>
-//#include <QtCore>
-//#include <QtGui>
 #include <QMessageBox>
-#include <vector>
-//#include <QFileDialog>
-
+#include <QVector>
 #include "player.h"
 #include "gameslide.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-
-
-
 #include "scorer.h"
+
 
 Scorer::Scorer()
 {
@@ -88,23 +82,24 @@ Scorer::Scorer()
     }
 }
 
+
 int Scorer::scorePlayer(Player toScore)
 {
     int finalScore=0;
     int tempNumber=0;
-    //qDebug() << "Score Beginning " << finalScore << " " << tempNumber << endl;
+
     //add money
     tempNumber=toScore.getMoney();
     finalScore=finalScore+(money*tempNumber);
-    //qDebug() << "Score Money " << finalScore << " " << tempNumber << endl;
+
     //add karma
     tempNumber=toScore.getKarma();
     finalScore=finalScore+(karma*tempNumber);
-    //qDebug() << "Score Karma " << finalScore << " " << tempNumber << endl;
+
     //add gameovers
     tempNumber=toScore.getGameovers();
     finalScore=finalScore+(gameovers*tempNumber);
-    //qDebug() << "Score Gameovers " << finalScore << " " << tempNumber << endl;
+
     //add items
     QVector<QString> tempVector=toScore.getItems();
     for (int i=0; i<tempVector.size(); i++)
@@ -118,7 +113,7 @@ int Scorer::scorePlayer(Player toScore)
             }
         }
     }
-    //qDebug() << "Score Items " << finalScore << endl;
+
     //add stats
     tempVector.clear();
     tempVector=toScore.getStats();
@@ -134,7 +129,6 @@ int Scorer::scorePlayer(Player toScore)
                 }
         }
     }
-    //qDebug() << "Score Stats " << finalScore << endl;
 
     return finalScore;
 }

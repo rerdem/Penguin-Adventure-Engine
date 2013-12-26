@@ -2,7 +2,7 @@
 #define GAMESLIDE_H
 
 #include <QString>
-//#include <QtGui>
+
 
 struct Option {
     int goal;
@@ -10,6 +10,7 @@ struct Option {
     QString name;
     QString txt;
 };
+
 
 class GameSlide
 {

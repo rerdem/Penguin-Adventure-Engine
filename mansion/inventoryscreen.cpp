@@ -7,9 +7,9 @@
 #include <QLineEdit>
 #include <QGridLayout>
 #include <cstdlib> //itoa()
-
 #include "player.h"
 #include "inventoryscreen.h"
+
 
 inventoryScreen::inventoryScreen(QDialog *parent) :
     QDialog(parent)
@@ -50,6 +50,7 @@ inventoryScreen::inventoryScreen(QDialog *parent) :
     layout->addWidget(okButton, 5, 3);
     this->setLayout(layout);
 }
+
 
 void inventoryScreen::showPlayer(Player showPlayer)
 {

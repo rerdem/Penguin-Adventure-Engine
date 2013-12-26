@@ -4,6 +4,7 @@
 #include <QString>
 #include "player.h"
 
+
 struct ItemStat {
     bool item;
     QString name;

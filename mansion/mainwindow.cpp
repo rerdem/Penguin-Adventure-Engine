@@ -4,21 +4,46 @@
 #include <QtGui>
 #include <QMessageBox>
 #include <vector>
-
 #include <cstdlib> //itoa()
-//#include <QFileDialog>
-
 #include "gameslide.h"
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+
 
 mainwindow::mainwindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::mainwindow)
 {
+    //ui->setupUi(this);
+
+    //create gamefiles folder, if it doesn't exist
+    QDir path;
+    QDir().mkdir("gamefiles");
+    path = QDir::currentPath() + QDir::separator() +"gamefiles";
+    xmlpath=QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + "adventure.xml";
+    imgpath=QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + + "images" + QDir::separator();
+
+    //set QString to UTF-8 encoding for special characters
+    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+
+    initialize();
+    createInterface();
+    game();
+}
+
+
+mainwindow::~mainwindow()
+{
+    delete ui;
+}
+
+
+void mainwindow::createInterface()
+{
     centralWidget = new QWidget(this);
     this->setCentralWidget( centralWidget );
 
+    //create file menu
     QMenu *fileMenu = new QMenu(tr("&File"), this);
     menuBar()->addMenu(fileMenu);
     fileMenu->addAction(tr("&About"), this, SLOT(about()));
@@ -30,24 +55,22 @@ mainwindow::mainwindow(QWidget *parent) :
     fileMenu->addAction(tr("&Quit"), this, SLOT(close()));
 
 
-    //ui->setupUi(this);
-
-    //if it doesn't exist, create gamefiles folder
-    QDir path;
-    QDir().mkdir("gamefiles");
-    path = QDir::currentPath() + QDir::separator() +"gamefiles";
-    xmlpath=QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + "adventure.xml";
-    imgpath=QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + + "images" + QDir::separator();
-    //set QString to UTF-8 encoding for special characters
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
-    initialize();
+    //create image label
+    slideImageLabel = new QLabel(this);
 
 
+    //create inventory button
     inventoryButton=new QPushButton("Inventory");
     connect(inventoryButton, SIGNAL(clicked()), this, SLOT(showInventory()));
 
-    signalMapper = new QSignalMapper(this);
 
+    //create field for slide text
+    slideTextEdit = new QTextEdit(this);
+    slideTextEdit->setReadOnly(true);
+
+
+    //create option buttons
+    signalMapper = new QSignalMapper(this);
     but01=new QPushButton("01");
     but02=new QPushButton("02");
     but03=new QPushButton("03");
@@ -89,21 +112,19 @@ mainwindow::mainwindow(QWidget *parent) :
     signalMapper->setMapping(but09, opt09);
     signalMapper->setMapping(but10, opt10);
     connect(signalMapper, SIGNAL(mapped(int)), this, SLOT(changeSlide(int)));
+    but01->hide();
+    but02->hide();
+    but03->hide();
+    but04->hide();
+    but05->hide();
+    but06->hide();
+    but07->hide();
+    but08->hide();
+    but09->hide();
+    but10->hide();
 
 
-
-
-    slideTextEdit = new QTextEdit(this);
-    slideTextEdit->setReadOnly(true);
-    //slideTextEdit->append("01");
-    //slideTextEdit->append("02");
-
-
-    //QImage slideImage;
-    //slideImage.load("image.jpg");
-    slideImageLabel = new QLabel(this);
-    //slideImageLabel->setPixmap(QPixmap::fromImage(slideImage));
-
+    //create and fill Layout
     mainBox = new QGridLayout(centralWidget);
     mainBox->addWidget(slideImageLabel, 0, 0, 1, 5);
     mainBox->addWidget(inventoryButton, 1, 0, 1, 5);
@@ -118,25 +139,8 @@ mainwindow::mainwindow(QWidget *parent) :
     mainBox->addWidget(but08, 4, 2);
     mainBox->addWidget(but09, 4, 3);
     mainBox->addWidget(but10, 4, 4);
-
-    but01->hide();
-    but02->hide();
-    but03->hide();
-    but04->hide();
-    but05->hide();
-    but06->hide();
-    but07->hide();
-    but08->hide();
-    but09->hide();
-    but10->hide();
-
-    game();
 }
 
-mainwindow::~mainwindow()
-{
-    delete ui;
-}
 
 void mainwindow::showInventory()
 {
@@ -144,6 +148,7 @@ void mainwindow::showInventory()
     i.showPlayer(*currentplayer);
     i.exec();
 }
+
 
 void mainwindow::reset()
 {
@@ -163,6 +168,7 @@ void mainwindow::reset()
     currentplayer->setPrevLocation(0);
     game();
 }
+
 
 void mainwindow::about()
 {
@@ -228,30 +234,37 @@ void mainwindow::load()
             tempString=in.readLine();
             if (QString::compare(tempString, "")==0) QMessageBox::warning(this, tr("File Error"), tr("This file is incompatible!"), QMessageBox::Ok);
             else currentplayer->setName(tempString);
+
             //read Inventory
             tempString=in.readLine();
             tempStringList=tempString.split("@");
             for (int i=0; i<tempStringList.length(); i++) currentplayer->addItem(tempStringList[i]);
+
             //read Stats
             tempString=in.readLine();
             tempStringList=tempString.split("@");
             for (int i=0; i<tempStringList.length(); i++) currentplayer->addStat(tempStringList[i]);
+
             //read money
             tempString=in.readLine();
             if (QString::compare(tempString, "")==0) QMessageBox::warning(this, tr("File Error"), tr("This file is incompatible!"), QMessageBox::Ok);
             else currentplayer->setMoney(tempString.toInt());
+
             //read karma
             tempString=in.readLine();
             if (QString::compare(tempString, "")==0) QMessageBox::warning(this, tr("File Error"), tr("This file is incompatible!"), QMessageBox::Ok);
             else currentplayer->setKarma(tempString.toInt());
+
             //read gameovers
             tempString=in.readLine();
             if (QString::compare(tempString, "")==0) QMessageBox::warning(this, tr("File Error"), tr("This file is incompatible!"), QMessageBox::Ok);
             else currentplayer->setGameovers(tempString.toInt());
+
             //read location
             tempString=in.readLine();
             if (QString::compare(tempString, "")==0) QMessageBox::warning(this, tr("File Error"), tr("This file is incompatible!"), QMessageBox::Ok);
             else currentplayer->setLocation(tempString.toInt());
+
             //read prevLocation
             tempString=in.readLine();
             if (QString::compare(tempString, "")==0) QMessageBox::warning(this, tr("File Error"), tr("This file is incompatible!"), QMessageBox::Ok);
@@ -312,8 +325,6 @@ void mainwindow::changeSlide( const int goalID)
         QString winMessage="You win!\nYour score is: ";
         winMessage.append(temp);
         QMessageBox::information(this, "Congratulations!", winMessage);
-        //currentplayer->setLocation(0);
-        //game();
     }
     else
     {
@@ -336,9 +347,11 @@ void mainwindow::game()
             //load image
             slideImage.load(imgpath+slides[i]->getImg());
             slideImageLabel->setPixmap(QPixmap::fromImage(slideImage));
+
             //clear the text area and add text of the new slide
             slideTextEdit->clear();
             slideTextEdit->append(slides[i]->getTxt());
+
             //compute items change
             if (!slides[i]->getItems().isEmpty())
             {
@@ -352,6 +365,7 @@ void mainwindow::game()
                     else currentplayer->removeItem(tempItems[j].mid(1));
                 }
             }
+
             //compute stats change
             if (!slides[i]->getStats().isEmpty())
             {
@@ -365,13 +379,17 @@ void mainwindow::game()
                     else currentplayer->removeStat(tempStats[j].mid(1));
                 }
             }
+
             //compute money change
             if ((currentplayer->getMoney()+slides[i]->getMoney())<0) currentplayer->setMoney(0);
             else currentplayer->setMoney(currentplayer->getMoney()+slides[i]->getMoney());
+
             //compute karma change
             currentplayer->setKarma(currentplayer->getKarma()+slides[i]->getKarma());
+
             //compute gameovers change
             if (slides[i]->getGameover()) currentplayer->setGameovers(currentplayer->getGameovers()+1);
+
             //list options
             if (!slides[i]->getOptions().isEmpty())
             {
@@ -402,76 +420,76 @@ void mainwindow::game()
                         //QMessageBox::critical(this, tr("Error!"), tr("Options found!"), QMessageBox::Ok);
                         switch(optionCounter)
                         {
-                        case 0:
-                            but01->setText(tempOptions[j].txt);
-                            opt01=tempOptions[j].goal;
-                            signalMapper->removeMappings(but01);
-                            signalMapper->setMapping(but01, opt01);
-                            but01->show();
-                            break;
-                        case 1:
-                            but02->setText(tempOptions[j].txt);
-                            opt02=tempOptions[j].goal;
-                            signalMapper->removeMappings(but02);
-                            signalMapper->setMapping(but02, opt02);
-                            but02->show();
-                            break;
-                        case 2:
-                            but03->setText(tempOptions[j].txt);
-                            opt03=tempOptions[j].goal;
-                            signalMapper->removeMappings(but03);
-                            signalMapper->setMapping(but03, opt03);
-                            but03->show();
-                            break;
-                        case 3:
-                            but04->setText(tempOptions[j].txt);
-                            opt04=tempOptions[j].goal;
-                            signalMapper->removeMappings(but04);
-                            signalMapper->setMapping(but04, opt04);
-                            but04->show();
-                            break;
-                        case 4:
-                            but05->setText(tempOptions[j].txt);
-                            opt05=tempOptions[j].goal;
-                            signalMapper->removeMappings(but05);
-                            signalMapper->setMapping(but05, opt05);
-                            but05->show();
-                            break;
-                        case 5:
-                            but06->setText(tempOptions[j].txt);
-                            opt06=tempOptions[j].goal;
-                            signalMapper->removeMappings(but06);
-                            signalMapper->setMapping(but06, opt06);
-                            but06->show();
-                            break;
-                        case 6:
-                            but07->setText(tempOptions[j].txt);
-                            opt07=tempOptions[j].goal;
-                            signalMapper->removeMappings(but07);
-                            signalMapper->setMapping(but07, opt07);
-                            but07->show();
-                            break;
-                        case 7:
-                            but08->setText(tempOptions[j].txt);
-                            opt08=tempOptions[j].goal;
-                            signalMapper->removeMappings(but08);
-                            signalMapper->setMapping(but08, opt08);
-                            but08->show();
-                            break;
-                        case 8:
-                            but09->setText(tempOptions[j].txt);
-                            opt09=tempOptions[j].goal;
-                            signalMapper->removeMappings(but09);
-                            signalMapper->setMapping(but09, opt09);
-                            but09->show();
-                            break;
-                        case 9:
-                            but10->setText(tempOptions[j].txt);
-                            opt10=tempOptions[j].goal;
-                            signalMapper->removeMappings(but10);
-                            signalMapper->setMapping(but10, opt10);
-                            but10->show();
-                            break;
+                            case 0:
+                                but01->setText(tempOptions[j].txt);
+                                opt01=tempOptions[j].goal;
+                                signalMapper->removeMappings(but01);
+                                signalMapper->setMapping(but01, opt01);
+                                but01->show();
+                                break;
+                            case 1:
+                                but02->setText(tempOptions[j].txt);
+                                opt02=tempOptions[j].goal;
+                                signalMapper->removeMappings(but02);
+                                signalMapper->setMapping(but02, opt02);
+                                but02->show();
+                                break;
+                            case 2:
+                                but03->setText(tempOptions[j].txt);
+                                opt03=tempOptions[j].goal;
+                                signalMapper->removeMappings(but03);
+                                signalMapper->setMapping(but03, opt03);
+                                but03->show();
+                                break;
+                            case 3:
+                                but04->setText(tempOptions[j].txt);
+                                opt04=tempOptions[j].goal;
+                                signalMapper->removeMappings(but04);
+                                signalMapper->setMapping(but04, opt04);
+                                but04->show();
+                                break;
+                            case 4:
+                                but05->setText(tempOptions[j].txt);
+                                opt05=tempOptions[j].goal;
+                                signalMapper->removeMappings(but05);
+                                signalMapper->setMapping(but05, opt05);
+                                but05->show();
+                                break;
+                            case 5:
+                                but06->setText(tempOptions[j].txt);
+                                opt06=tempOptions[j].goal;
+                                signalMapper->removeMappings(but06);
+                                signalMapper->setMapping(but06, opt06);
+                                but06->show();
+                                break;
+                            case 6:
+                                but07->setText(tempOptions[j].txt);
+                                opt07=tempOptions[j].goal;
+                                signalMapper->removeMappings(but07);
+                                signalMapper->setMapping(but07, opt07);
+                                but07->show();
+                                break;
+                            case 7:
+                                but08->setText(tempOptions[j].txt);
+                                opt08=tempOptions[j].goal;
+                                signalMapper->removeMappings(but08);
+                                signalMapper->setMapping(but08, opt08);
+                                but08->show();
+                                break;
+                            case 8:
+                                but09->setText(tempOptions[j].txt);
+                                opt09=tempOptions[j].goal;
+                                signalMapper->removeMappings(but09);
+                                signalMapper->setMapping(but09, opt09);
+                                but09->show();
+                                break;
+                            case 9:
+                                but10->setText(tempOptions[j].txt);
+                                opt10=tempOptions[j].goal;
+                                signalMapper->removeMappings(but10);
+                                signalMapper->setMapping(but10, opt10);
+                                but10->show();
+                                break;
                         }
                         optionCounter++;
                     }
@@ -483,27 +501,6 @@ void mainwindow::game()
             break;
         }
     }
-
-
-
-    /**
-    QImage slideImage;
-    slideImage.load("image2.jpg");
-    //slideImageLabel = new QLabel(this);
-    slideImageLabel->setPixmap(QPixmap::fromImage(slideImage));
-    slideTextEdit->clear();
-    slideTextEdit->append("03");
-
-
-    bool breaker=false;
-    //game-Loop
-    while (!breaker)
-    {
-
-        if (currentplayer->getLocation()==-1) breaker=true;
-        breaker=true;
-    }
-    **/
 }
 
 
@@ -511,8 +508,8 @@ void mainwindow::initialize()
 {
     Q_ASSERT(xmlpath.length()>0);
 
+    //create Player
     currentplayer=new Player();
-
     bool ok;
     QString text = QInputDialog::getText(this, "What is your name?","What is your name?", QLineEdit::Normal,"", &ok);
     if ( ok && !text.isEmpty() ) {
@@ -520,9 +517,10 @@ void mainwindow::initialize()
         currentplayer->setName(text);
     }
 
-
+    //create Scorer
     referee=new Scorer();
 
+    //read XML
     QFile file(xmlpath);
     if (!file.open(QFile::ReadOnly))
     {
@@ -548,23 +546,16 @@ void mainwindow::initialize()
                 continue;
             }
             if(xml.name() == "slide") {
-                //qDebug() << xml.name().toString();
                 slide=new GameSlide();
                 attributes = xml.attributes();
                 if(attributes.hasAttribute("id")) {
                     slide->setId(attributes.value("id").toString().toInt());
-                    //qDebug() << attributes.value("id").toString();
                 }
                 xml.readNext();
-                //while (!xml.atEnd()) {
                 while(!(xml.tokenType() == QXmlStreamReader::EndElement && xml.name() == "slide")) {
-                    //qDebug() <<xml.name().toString();
                     if (xml.isStartElement()) {
                         if(xml.name() == "img") {
-                            //QMessageBox::information(this, "Info", xml.readElementText());
                             slide->setImg(xml.readElementText());
-                            //qDebug() << xml.name().toString();
-                            //qDebug() << xml.readElementText();
                         }
                         if(xml.name() == "txt") {
                             textReplacer=xml.readElementText();
@@ -577,9 +568,6 @@ void mainwindow::initialize()
                             textReplacer.replace("*u*", "<u>");
                             textReplacer.replace("*/u*", "</u>");
                             slide->setTxt(textReplacer);
-                            //slide->setTxt(xml.readElementText());
-                            //qDebug() << xml.name().toString();
-                            //qDebug() << xml.readElementText();
                         }
                         if (xml.name() == "items") {
                             xml.readNext();
@@ -587,8 +575,6 @@ void mainwindow::initialize()
                                 if (xml.isStartElement()) {
                                     if(xml.name() == "item") {
                                         slide->addItems(xml.readElementText());
-                                        //qDebug() << xml.name().toString();
-                                        //qDebug() << xml.readElementText();
                                     }
                                 }
                                 xml.readNext();
@@ -600,8 +586,6 @@ void mainwindow::initialize()
                                 if (xml.isStartElement()) {
                                     if(xml.name() == "stat") {
                                         slide->addStats(xml.readElementText());
-                                        //qDebug() << xml.name().toString();
-                                        //qDebug() << xml.readElementText();
                                     }
                                 }
                                 xml.readNext();
@@ -609,17 +593,11 @@ void mainwindow::initialize()
                         }
                         if(xml.name() == "money") {
                             slide->setMoney(xml.readElementText().toInt());
-                            //qDebug() << xml.name().toString();
-                            //qDebug() << xml.readElementText();
                         }
                         if(xml.name() == "karma") {
-                            //qDebug() << xml.name().toString();
-                            //qDebug() << xml.readElementText();
                             slide->setKarma(xml.readElementText().toInt());
                         }
                         if(xml.name() == "gameover") {
-                            //qDebug() << xml.name().toString();
-                            //qDebug() << xml.readElementText();
                             slide->setGameover(true);
                         }
                         if (xml.name() == "options") {
@@ -645,10 +623,6 @@ void mainwindow::initialize()
                                             req="";
                                             name="";
                                         }
-                                        //qDebug() << xml.name().toString();
-                                        //qDebug() << attributes.value("slide").toString();
-                                        //qDebug() << attributes.value("req").toString();
-                                        //qDebug() << xml.readElementText();
                                     }
                                     slide->addOptions(goal, req, name, xml.readElementText());
                                 }
@@ -657,32 +631,20 @@ void mainwindow::initialize()
                         }
                     }
                     xml.readNext();
-                    //qDebug() <<xml.name().toString();
                 }
                 slides.append(slide);
                 xml.readNext();
             }
         }
-        /**
-        if(token == QXmlStreamReader::EndDocument) {
-            //qDebug() << "Ende";
-            QMessageBox::information(this, "Information", "Import complete!");
-            break;
-        }
-        **/
     }
 
-    /* Error handling. */
+    // Error handling
     if(xml.hasError()) {
         QMessageBox::critical(this,
                               "QXSRExample::parseXML",
                               xml.errorString(),
                               QMessageBox::Ok);
     }
-    /* Removes any device() or data from the reader
-     * and resets its internal state to the initial state. */
     xml.clear();
     file.close();
 }
-
-
