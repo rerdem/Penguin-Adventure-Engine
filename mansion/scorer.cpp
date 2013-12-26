@@ -5,7 +5,6 @@
 #include "player.h"
 #include "gameslide.h"
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 #include "scorer.h"
 
 

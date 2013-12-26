@@ -23,4 +23,4 @@ HEADERS  += mainwindow.h \
     scorer.h \
     inventoryscreen.h
 
-FORMS    += mainwindow.ui
+FORMS    +=

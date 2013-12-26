@@ -16,10 +16,6 @@ using namespace std;
 #include "inventoryscreen.h"
 
 
-namespace Ui {
-class mainwindow;
-}
-
 class mainwindow : public QMainWindow
 {
     Q_OBJECT
@@ -29,8 +25,6 @@ public:
     ~mainwindow();
     
 private:
-    Ui::mainwindow *ui;
-
     QVector<GameSlide*> slides;
     Player *currentplayer;
     Scorer *referee;

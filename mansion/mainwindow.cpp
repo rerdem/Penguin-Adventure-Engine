@@ -11,11 +11,8 @@
 
 
 mainwindow::mainwindow(QWidget *parent) :
-    QMainWindow(parent),
-    ui(new Ui::mainwindow)
+    QMainWindow(parent)
 {
-    //ui->setupUi(this);
-
     //create gamefiles folder, if it doesn't exist
     QDir path;
     QDir().mkdir("gamefiles");
@@ -34,7 +31,6 @@ mainwindow::mainwindow(QWidget *parent) :
 
 mainwindow::~mainwindow()
 {
-    delete ui;
 }
 
 
