@@ -38,6 +38,8 @@ void mainwindow::createInterface()
     centralWidget = new QWidget(this);
     this->setCentralWidget( centralWidget );
 
+    this->setWindowState(Qt::WindowMaximized);
+
     //create file menu
     QMenu *fileMenu = new QMenu(tr("&File"), this);
     menuBar()->addMenu(fileMenu);
@@ -123,17 +125,17 @@ void mainwindow::createInterface()
     mainBox = new QGridLayout(centralWidget);
     mainBox->addWidget(slideImageLabel, 0, 0, 1, 5);
     mainBox->addWidget(inventoryButton, 1, 0, 1, 5);
-    mainBox->addWidget(slideTextEdit, 2, 0, 1, 5);
-    mainBox->addWidget(but01, 3, 0);
-    mainBox->addWidget(but02, 3, 1);
-    mainBox->addWidget(but03, 3, 2);
-    mainBox->addWidget(but04, 3, 3);
-    mainBox->addWidget(but05, 3, 4);
-    mainBox->addWidget(but06, 4, 0);
-    mainBox->addWidget(but07, 4, 1);
-    mainBox->addWidget(but08, 4, 2);
-    mainBox->addWidget(but09, 4, 3);
-    mainBox->addWidget(but10, 4, 4);
+    mainBox->addWidget(slideTextEdit, 2, 0, 2, 5);
+    mainBox->addWidget(but01, 4, 0);
+    mainBox->addWidget(but02, 4, 1);
+    mainBox->addWidget(but03, 4, 2);
+    mainBox->addWidget(but04, 4, 3);
+    mainBox->addWidget(but05, 4, 4);
+    mainBox->addWidget(but06, 5, 0);
+    mainBox->addWidget(but07, 5, 1);
+    mainBox->addWidget(but08, 5, 2);
+    mainBox->addWidget(but09, 5, 3);
+    mainBox->addWidget(but10, 5, 4);
 }
 
 
@@ -489,6 +491,10 @@ void mainwindow::game()
                 itoa(slides[i]->getKarma(), temp, 10);
                 slideTextEdit->append(temp);
             }
+
+            //scroll textEdit to top
+            slideTextEdit->moveCursor(QTextCursor::Start);
+            slideTextEdit->ensureCursorVisible();
 
             //compute gameovers change
             if (slides[i]->getGameover()) currentplayer->setGameovers(currentplayer->getGameovers()+1);
