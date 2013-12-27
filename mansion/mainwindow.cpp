@@ -174,7 +174,7 @@ void mainwindow::about()
     fileName = QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + "credits.txt";
 
     QString showString;
-    showString="This game runs on the Penguin Adventure Engine!\n\n";
+    showString="This game runs on the Penguin Adventure Engine by fallenpenguin/bird-in-a-tux.\n\n";
     if (fileName.isNull()==false)
     {
         file.setFileName(fileName);
