@@ -317,7 +317,6 @@ void mainwindow::changeSlide( const int goalID)
         int score=referee->scorePlayer(*currentplayer);
         char temp[15];
         itoa(score, temp, 10);
-        qDebug() << score;
         QString winMessage="You win!\nYour score is: ";
         winMessage.append(temp);
         QMessageBox::information(this, "Congratulations!", winMessage);
@@ -333,7 +332,7 @@ void mainwindow::changeSlide( const int goalID)
 
 void mainwindow::game()
 {
-
+    char temp[15];
     QImage slideImage;
     for (int i=0; i<slides.size(); i++)
     {
@@ -356,7 +355,12 @@ void mainwindow::game()
                 {
                     if (QString::compare(tempItems[j].at(0),"+")==0)
                     {
-                        if (!currentplayer->hasItem(tempItems[j].mid(1))) currentplayer->addItem(tempItems[j].mid(1));
+                        if (!currentplayer->hasItem(tempItems[j].mid(1)))
+                        {
+                            currentplayer->addItem(tempItems[j].mid(1));
+                            slideTextEdit->append("");
+                            slideTextEdit->append("Gained item: " + tempItems[j].mid(1));
+                        }
                     }
                     else currentplayer->removeItem(tempItems[j].mid(1));
                 }
@@ -370,7 +374,12 @@ void mainwindow::game()
                 {
                     if (QString::compare(tempStats[j].at(0),"+")==0)
                     {
-                        if (!currentplayer->isStatus(tempStats[j].mid(1))) currentplayer->addStat(tempStats[j].mid(1));
+                        if (!currentplayer->isStatus(tempStats[j].mid(1)))
+                        {
+                            currentplayer->addStat(tempStats[j].mid(1));
+                            slideTextEdit->append("\n"); //2 empty lines
+                            slideTextEdit->append("Gained status: " + tempStats[j].mid(1));
+                        }
                     }
                     else currentplayer->removeStat(tempStats[j].mid(1));
                 }
@@ -379,9 +388,21 @@ void mainwindow::game()
             //compute money change
             if ((currentplayer->getMoney()+slides[i]->getMoney())<0) currentplayer->setMoney(0);
             else currentplayer->setMoney(currentplayer->getMoney()+slides[i]->getMoney());
+            if (slides[i]->getMoney()!=0)
+            {
+                slideTextEdit->append("\nMoney:"); //empty line then text
+                itoa(slides[i]->getMoney(), temp, 10);
+                slideTextEdit->append(temp);
+            }
 
             //compute karma change
             currentplayer->setKarma(currentplayer->getKarma()+slides[i]->getKarma());
+            if (slides[i]->getKarma()!=0)
+            {
+                slideTextEdit->append("\nKarma:"); //empty line then text
+                itoa(slides[i]->getKarma(), temp, 10);
+                slideTextEdit->append(temp);
+            }
 
             //compute gameovers change
             if (slides[i]->getGameover()) currentplayer->setGameovers(currentplayer->getGameovers()+1);
