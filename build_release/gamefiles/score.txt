@@ -1,0 +1,10 @@
+money:5
+karma:10
+gameovers:-10
+
+/items
+Key:10
+Stone:10
+
+/stats
+cursed:-50

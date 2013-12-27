@@ -309,7 +309,7 @@ void mainwindow::save()
 }
 
 
-void mainwindow::changeSlide( const int goalID)
+void mainwindow::changeSlide(const int goalID)
 {
     if (goalID==-1)
     {
@@ -318,8 +318,8 @@ void mainwindow::changeSlide( const int goalID)
         itoa(score, temp, 10);
         QString winMessage="\nYour score is: ";
         winMessage.append(temp);
-        bool slidefound=false;
 
+        bool slidefound=false;
         QImage slideImage;
         for (int i=0; i<slides.size(); i++)
         {
@@ -356,6 +356,20 @@ void mainwindow::changeSlide( const int goalID)
                     break;
                 }
             }
+        }
+        //if there are optionButtons visible, hide them
+        if (but01->isVisible())
+        {
+            but01->hide();
+            but02->hide();
+            but03->hide();
+            but04->hide();
+            but05->hide();
+            but06->hide();
+            but07->hide();
+            but08->hide();
+            but09->hide();
+            but10->hide();
         }
         //QMessageBox::information(this, "Congratulations!", winMessage);
     }
@@ -620,7 +634,7 @@ void mainwindow::initialize()
     }
 
     GameSlide *slide;
-    int goal;
+    int goal=0;
     QString req, name, textReplacer;
     QXmlStreamAttributes attributes;
 
