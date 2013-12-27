@@ -316,9 +316,48 @@ void mainwindow::changeSlide( const int goalID)
         int score=referee->scorePlayer(*currentplayer);
         char temp[15];
         itoa(score, temp, 10);
-        QString winMessage="You win!\nYour score is: ";
+        QString winMessage="\nYour score is: ";
         winMessage.append(temp);
-        QMessageBox::information(this, "Congratulations!", winMessage);
+        bool slidefound=false;
+
+        QImage slideImage;
+        for (int i=0; i<slides.size(); i++)
+        {
+            //Slide found
+            if (-1==slides[i]->getId())
+            {
+                //load image
+                slideImage.load(imgpath+slides[i]->getImg());
+                slideImageLabel->setPixmap(QPixmap::fromImage(slideImage));
+
+                //clear the text area and add text of the new slide
+                slideTextEdit->clear();
+                slideTextEdit->append(slides[i]->getTxt());
+                slideTextEdit->append(winMessage);
+                slidefound=true;
+                break;
+            }
+        }
+        //if there's no win slide, take the image of Welcome slide
+        if (!slidefound)
+        {
+            for (int i=0; i<slides.size(); i++)
+            {
+                //Slide found
+                if (0==slides[i]->getId())
+                {
+                    //load image
+                    slideImage.load(imgpath+slides[i]->getImg());
+                    slideImageLabel->setPixmap(QPixmap::fromImage(slideImage));
+
+                    //clear the text area and add text of the new slide
+                    slideTextEdit->clear();
+                    slideTextEdit->append(winMessage);
+                    break;
+                }
+            }
+        }
+        //QMessageBox::information(this, "Congratulations!", winMessage);
     }
     else
     {
