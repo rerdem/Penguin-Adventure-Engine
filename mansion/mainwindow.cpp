@@ -7,7 +7,6 @@
 #include <cstdlib> //itoa()
 #include "gameslide.h"
 #include "mainwindow.h"
-#include "ui_mainwindow.h"
 
 
 mainwindow::mainwindow(QWidget *parent) :
@@ -362,7 +361,24 @@ void mainwindow::game()
                             slideTextEdit->append("Gained item: " + tempItems[j].mid(1));
                         }
                     }
-                    else currentplayer->removeItem(tempItems[j].mid(1));
+                    else
+                    {
+                        if (QString::compare(tempItems[j].mid(1),"random", Qt::CaseInsensitive)==0)
+                        {
+                            currentplayer->removeRandomItem();
+                            slideTextEdit->append("");
+                            slideTextEdit->append("Lost random item");
+                        }
+                        else
+                        {
+                            if (currentplayer->hasItem(tempItems[j].mid(1)))
+                            {
+                                currentplayer->removeItem(tempItems[j].mid(1));
+                                slideTextEdit->append("");
+                                slideTextEdit->append("Lost item: " + tempItems[j].mid(1));
+                            }
+                        }
+                    }
                 }
             }
 
@@ -381,7 +397,24 @@ void mainwindow::game()
                             slideTextEdit->append("Gained status: " + tempStats[j].mid(1));
                         }
                     }
-                    else currentplayer->removeStat(tempStats[j].mid(1));
+                    else
+                    {
+                        if (QString::compare(tempStats[j].mid(1),"random", Qt::CaseInsensitive)==0)
+                        {
+                            currentplayer->removeRandomStat();
+                            slideTextEdit->append("");
+                            slideTextEdit->append("Lost random status");
+                        }
+                        else
+                        {
+                            if (currentplayer->isStatus(tempStats[j].mid(1)))
+                            {
+                                currentplayer->removeStat(tempStats[j].mid(1));
+                                slideTextEdit->append("");
+                                slideTextEdit->append("Lost status: " + tempStats[j].mid(1));
+                            }
+                        }
+                    }
                 }
             }
 

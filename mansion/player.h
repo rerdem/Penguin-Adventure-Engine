@@ -14,11 +14,13 @@ class Player
 
         void addItem(QString tempItem) {items.append(tempItem);}
         void removeItem(QString tempItem);
+        void removeRandomItem();
         void clearItems();
         QVector<QString>& getItems() {return items;}
 
         void addStat(QString tempStat) {stats.append(tempStat);}
         void removeStat(QString tempStat);
+        void removeRandomStat();
         void clearStats();
         QVector<QString>& getStats() {return stats;}
 
@@ -51,6 +53,7 @@ class Player
         int gameovers;
         int location;
         int prevLocation;
+        int randomInt(int low, int high);
 };
 
 #endif // PLAYER_H

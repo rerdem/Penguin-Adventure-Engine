@@ -1,7 +1,7 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'inventoryscreen.h'
 **
-** Created: Thu 26. Dec 16:40:05 2013
+** Created: Fri 27. Dec 18:48:24 2013
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!

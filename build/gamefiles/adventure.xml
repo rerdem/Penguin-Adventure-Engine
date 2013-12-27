@@ -2,6 +2,7 @@
 <game>
 	<slide id="-1">
 		<img>win.png</img>
+		<txt>You win!</txt>
 		<options>
 			<option slide="-1">The End</option>
 		</options>
@@ -9,6 +10,11 @@
 	<slide id="0">
 		<img>image.jpg</img>
 		<txt>*b*Welcome*/b**br* Slide</txt>
+		<items>
+			<item>+Key</item>
+			<item>+Stone</item>
+			<item>-Book</item>
+		</items>
 		<options>
 			<option slide="1">Continue</option>
 		</options>
@@ -17,9 +23,7 @@
 		<img>01.jpg</img>
 		<txt>Blabla walks east.</txt>
 		<items>
-			<item>+Key</item>
-			<item>+Stone</item>
-			<item>-Book</item>
+			<item>-random</item>
 		</items>
 		<stats>
 			<stat>+Cursed</stat>
