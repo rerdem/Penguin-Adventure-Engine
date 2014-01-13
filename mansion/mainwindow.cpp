@@ -8,6 +8,8 @@
 #include "gameslide.h"
 #include "mainwindow.h"
 
+#include "imagelabel.h"
+
 
 mainwindow::mainwindow(QWidget *parent) :
     QMainWindow(parent)
@@ -38,7 +40,8 @@ void mainwindow::createInterface()
     centralWidget = new QWidget(this);
     this->setCentralWidget( centralWidget );
 
-    this->setWindowState(Qt::WindowMaximized);
+    this->resize(800,600);
+    //this->setWindowState(Qt::WindowMaximized);
 
     //create file menu
     QMenu *fileMenu = new QMenu(tr("&File"), this);
@@ -53,7 +56,7 @@ void mainwindow::createInterface()
 
 
     //create image label
-    slideImageLabel = new QLabel(this);
+    slideImageLabel = new ImageLabel(this);
 
 
     //create inventory button
@@ -123,19 +126,19 @@ void mainwindow::createInterface()
 
     //create and fill Layout
     mainBox = new QGridLayout(centralWidget);
-    mainBox->addWidget(slideImageLabel, 0, 0, 1, 5);
-    mainBox->addWidget(inventoryButton, 1, 0, 1, 5);
-    mainBox->addWidget(slideTextEdit, 2, 0, 2, 5);
-    mainBox->addWidget(but01, 4, 0);
-    mainBox->addWidget(but02, 4, 1);
-    mainBox->addWidget(but03, 4, 2);
-    mainBox->addWidget(but04, 4, 3);
-    mainBox->addWidget(but05, 4, 4);
-    mainBox->addWidget(but06, 5, 0);
-    mainBox->addWidget(but07, 5, 1);
-    mainBox->addWidget(but08, 5, 2);
-    mainBox->addWidget(but09, 5, 3);
-    mainBox->addWidget(but10, 5, 4);
+    mainBox->addWidget(slideImageLabel, 0, 0, 2, 5);
+    mainBox->addWidget(inventoryButton, 2, 0, 1, 5);
+    mainBox->addWidget(slideTextEdit, 3, 0, 2, 5);
+    mainBox->addWidget(but01, 5, 0);
+    mainBox->addWidget(but02, 5, 1);
+    mainBox->addWidget(but03, 5, 2);
+    mainBox->addWidget(but04, 5, 3);
+    mainBox->addWidget(but05, 5, 4);
+    mainBox->addWidget(but06, 6, 0);
+    mainBox->addWidget(but07, 6, 1);
+    mainBox->addWidget(but08, 6, 2);
+    mainBox->addWidget(but09, 6, 3);
+    mainBox->addWidget(but10, 6, 4);
 }
 
 

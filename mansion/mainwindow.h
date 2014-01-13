@@ -15,6 +15,7 @@ using namespace std;
 #include "scorer.h"
 #include "inventoryscreen.h"
 
+#include "imagelabel.h"
 
 class mainwindow : public QMainWindow
 {
@@ -32,7 +33,7 @@ private:
     QWidget *centralWidget;
     QGridLayout *mainBox;
     QTextEdit *slideTextEdit;
-    QLabel *slideImageLabel;
+    ImageLabel *slideImageLabel;
     QPushButton *inventoryButton;
     QPushButton *but01, *but02, *but03, *but04, *but05,
                 *but06, *but07, *but08, *but09, *but10;
