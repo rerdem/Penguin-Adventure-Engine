@@ -8,6 +8,7 @@ QT       += core gui
 
 TARGET = mansion
 TEMPLATE = app
+RC_FILE = pae_icon.rc
 
 
 SOURCES += main.cpp\
