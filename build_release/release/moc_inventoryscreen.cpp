@@ -1,13 +1,13 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'inventoryscreen.h'
 **
-** Created: Fri 27. Dec 19:36:19 2013
+** Created: Sun 19. Jan 18:54:27 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../mansion/inventoryscreen.h"
+#include "../../penguinadventure/inventoryscreen.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'inventoryscreen.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 63

@@ -1,13 +1,13 @@
 /****************************************************************************
 ** Meta object code from reading C++ file 'imagelabel.h'
 **
-** Created: Mon 13. Jan 16:51:37 2014
+** Created: Sun 19. Jan 18:27:15 2014
 **      by: The Qt Meta Object Compiler version 63 (Qt 4.8.1)
 **
 ** WARNING! All changes made in this file will be lost!
 *****************************************************************************/
 
-#include "../../mansion/imagelabel.h"
+#include "../../penguinadventure/imagelabel.h"
 #if !defined(Q_MOC_OUTPUT_REVISION)
 #error "The header file 'imagelabel.h' doesn't include <QObject>."
 #elif Q_MOC_OUTPUT_REVISION != 63
