@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<game>
+	<slide id="-1">
+		<img>win.jpg</img>
+		<txt>*b*Congratulations!*/b**br**br*You win!</txt>
+	</slide>
+	<slide id="0">
+		<img>000.png</img>
+		<txt>*b*Welcome!*/b*</txt>
+		<options>
+			<option slide="1">Click here to begin...</option>
+		</options>
+	</slide>
+	<slide id="1">
+		<img>example.png</img>
+		<txt>This is regular text.*br*This test will be in the second line and this is *b*bold*/b*, *i*italic*/i* and *u*underlined*/u*.</txt>
+		<money>+5</money>
+		<karma>+1</karma>
+		<gameover></gameover>
+		<items>
+			<item>+Key</item>
+			<item>-Crystal</item>
+			<item>-random</item>
+		</items>
+		<stats>
+			<stat>+Cursed</stat>
+			<stat>-Charmed</stat>
+			<stat>-random</stat>
+		</stats>
+		<options>
+			<option slide="2">Continue.</option>
+			<option slide="3" req="+item" name="Key">Use Key</option>
+			<option slide="4" req="-item" name="Crystal">Continue (no crystal)</option>
+			<option slide="5" req="+stat" name="Cursed">Cursed option</option>
+			<option slide="6" req="-stat" name="Charmed">Not charmed enough</option>
+		</options>
+	</slide>
+</game>

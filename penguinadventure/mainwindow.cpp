@@ -1,3 +1,24 @@
+/**
+    Copyright 2014 Rona Erdem
+
+    This file is part of the Penguin Adventure Engine.
+
+    The Penguin Adventure Engine is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    The Penguin Adventure Engine is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with the Penguin Adventure Engine.  If not, see <http://www.gnu.org/licenses/>.
+
+**/
+
+
 #include <QString>
 #include <QDir>
 #include <QtCore>
@@ -7,7 +28,6 @@
 #include <cstdlib> //itoa()
 #include "gameslide.h"
 #include "mainwindow.h"
-
 #include "imagelabel.h"
 
 
@@ -41,7 +61,6 @@ void mainwindow::createInterface()
     this->setCentralWidget( centralWidget );
 
     this->resize(800,600);
-    //this->setWindowState(Qt::WindowMaximized);
 
     //create file menu
     QMenu *fileMenu = new QMenu(tr("&File"), this);
@@ -154,10 +173,7 @@ void mainwindow::reset()
 {
     bool ok;
     QString text = QInputDialog::getText(this, "What is your name?","What is your name?", QLineEdit::Normal,"", &ok);
-    if ( ok && !text.isEmpty() ) {
-        //user entered something and pressed OK
-        currentplayer->setName(text);
-    }
+    if (ok && !text.isEmpty()) currentplayer->setName(text);
     else currentplayer->setName("Player01");
     currentplayer->setMoney(0);
     currentplayer->setKarma(0);
@@ -200,16 +216,11 @@ void mainwindow::about()
         }
         file.close();
     }
-    //QMessageBox::about(this, "About", showString);
-
-
-    QMessageBox msgBox;
-    msgBox.setWindowTitle("About");
-    msgBox.setTextFormat(Qt::RichText); // this does the magic trick and allows you to click the link
-    msgBox.setText(showString);
-    msgBox.exec();
-
-
+    QMessageBox aboutBox;
+    aboutBox.setWindowTitle("About");
+    aboutBox.setTextFormat(Qt::RichText);
+    aboutBox.setText(showString);
+    aboutBox.exec();
 }
 
 
@@ -234,8 +245,6 @@ void mainwindow::load()
         QTextStream in(&file);
         QString tempString;
         QStringList tempStringList;
-
-
 
         if (in.status() == QTextStream::Ok)
         {
@@ -385,7 +394,6 @@ void mainwindow::changeSlide(const int goalID)
             but09->hide();
             but10->hide();
         }
-        //QMessageBox::information(this, "Congratulations!", winMessage);
     }
     else
     {
@@ -535,10 +543,8 @@ void mainwindow::game()
                 {
                     //enforcing maximum of 10 Options
                     if (optionCounter==10) break;
-                    //qDebug() << tempOptions[j].req << tempOptions[j].name << currentplayer->meetsReq(tempOptions[j].req, tempOptions[j].name);
                     if (currentplayer->meetsReq(tempOptions[j].req, tempOptions[j].name))
                     {
-                        //QMessageBox::critical(this, tr("Error!"), tr("Options found!"), QMessageBox::Ok);
                         switch(optionCounter)
                         {
                             case 0:

@@ -1,3 +1,24 @@
+/**
+    Copyright 2014 Rona Erdem
+
+    This file is part of the Penguin Adventure Engine.
+
+    The Penguin Adventure Engine is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    The Penguin Adventure Engine is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with the Penguin Adventure Engine.  If not, see <http://www.gnu.org/licenses/>.
+
+**/
+
+
 #include <QString>
 #include <QDir>
 #include <QMessageBox>
@@ -56,13 +77,9 @@ Scorer::Scorer()
             if (status==misc)
             {
                 splitter=tempString.split(":");
-                //qDebug() << "Parse Misc Name " << splitter[0] << endl;
-                //qDebug() << "Parse Misc Value " << splitter[1].toInt() << endl;
                 if (QString::compare(splitter[0], "money", Qt::CaseInsensitive)==0) money=splitter[1].toInt();
                 if (QString::compare(splitter[0], "karma", Qt::CaseInsensitive)==0) karma=splitter[1].toInt();
                 if (QString::compare(splitter[0], "gameovers", Qt::CaseInsensitive)==0) gameovers=splitter[1].toInt();
-                //qDebug() << "Parse MiscSave money karma over" << endl;
-                //qDebug() << "Parse MiscSave " << money << " " << karma << " " << gameovers << endl;
             }
             else {
                 splitter=tempString.split(":");
@@ -72,9 +89,6 @@ Scorer::Scorer()
                 tempItemStat.name=splitter[0];
                 tempItemStat.value=splitter[1].toInt();
                 itemstats.append(tempItemStat);
-                //qDebug() << "Parse itemstat Name " << splitter[0] << endl;
-                //qDebug() << "Parse item " << tempItemStat.item << endl;
-                //qDebug() << "Parse itemstat Value " << splitter[1] << endl;
             }
         }
         file.close();

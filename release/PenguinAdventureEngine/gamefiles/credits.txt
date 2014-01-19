@@ -1,0 +1,3 @@
+This is an example of how a
+credit page in the Penguin Adventure Engine
+could look like.
