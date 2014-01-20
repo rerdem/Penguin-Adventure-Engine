@@ -1,0 +1,13 @@
+money:5
+karma:10
+gameovers:-10
+
+/items
+Necklace:10
+Jewel:10
+Key:10
+Crystal:50
+
+/stats
+Cursed:-50
+Charmed:15
