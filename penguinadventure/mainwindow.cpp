@@ -23,6 +23,7 @@
 #include <QDir>
 #include <QtCore>
 #include <QtGui>
+#include <QtWidgets>
 #include <QMessageBox>
 #include <vector>
 #include <cstdlib> //itoa()
@@ -42,7 +43,7 @@ mainwindow::mainwindow(QWidget *parent) :
     imgpath=QDir::currentPath() + QDir::separator() + "gamefiles" + QDir::separator() + + "images" + QDir::separator();
 
     //set QString to UTF-8 encoding for special characters
-    QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
+    //QTextCodec::setCodecForCStrings(QTextCodec::codecForName("UTF-8"));
 
     initialize();
     createInterface();
@@ -256,11 +257,13 @@ void mainwindow::load()
             //read Inventory
             tempString=in.readLine();
             tempStringList=tempString.split("@");
+            currentplayer->clearItems();
             for (int i=0; i<tempStringList.length(); i++) currentplayer->addItem(tempStringList[i]);
 
             //read Stats
             tempString=in.readLine();
             tempStringList=tempString.split("@");
+            currentplayer->clearStats();
             for (int i=0; i<tempStringList.length(); i++) currentplayer->addStat(tempStringList[i]);
 
             //read money

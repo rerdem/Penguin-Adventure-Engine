@@ -22,6 +22,7 @@
 #ifndef INVENTORYSCREEN_H
 #define INVENTORYSCREEN_H
 
+#include <QtWidgets>
 #include <QDialog>
 #include <QString>
 #include <QPushButton>

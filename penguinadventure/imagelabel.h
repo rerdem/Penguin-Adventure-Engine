@@ -23,6 +23,7 @@
 #define IMAGELABEL_H
 
 #include <QWidget>
+#include <QtWidgets>
 #include <QtGui>
 
 class ImageLabel : public QWidget

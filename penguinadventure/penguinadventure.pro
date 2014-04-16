@@ -23,7 +23,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui widgets
 
 TARGET = penguinadventure
 TEMPLATE = app

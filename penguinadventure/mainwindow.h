@@ -27,6 +27,7 @@
 #include <iostream>
 using namespace std;
 #include <fstream>
+#include <QtWidgets>
 #include <QtGui>
 #include <QPushButton>
 #include <QVBoxLayout>

@@ -21,6 +21,7 @@
 
 #include <QString>
 #include <QDir>
+#include <QtWidgets>
 #include <QMessageBox>
 #include <QVector>
 #include "player.h"
